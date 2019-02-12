@@ -1,0 +1,68 @@
+<div class="container border">
+  <div class="row">
+    <div class="col-md-6 col-xs-6">
+      <h3>{{ editMode ? user.name : 'Novo Usuário'}}</h3>
+    </div>
+  </div>
+  <div class="row">
+      <div class="col-md-6 col-xs-6">
+      <form [formGroup]="userForm" (ngSubmit)="onSubmit()" >        
+          <div class="form-group">
+            <label for="id">ID</label>
+            <input type="text" id="id" formControlName="id" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="login">Login</label>
+            <input type="text" id="login" formControlName="login" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="password">Senha</label>
+            <input type="password" id="password" formControlName="password" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="name">Nome</label>
+            <input type="text" id="name" formControlName="name" class="form-control">
+          </div>
+          <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="A" formControlName="A">
+              <label class="form-check-label" for="A">
+                Ativo
+              </label>
+          </div>
+          <div class="form-group">
+              <label for="userGroup">Status</label>
+              <select id="userGroup" formControlName="userGroup" class="form-control" 
+                (change)="onChangeGroup($event.target.selectedOptions[0].id)">
+                <option *ngFor='let userGroup of usersService.userGroups' [value]='userGroup' [id]='userGroup.id'>
+                  {{ userGroup }}
+                </option>              
+              </select>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="1" formControlName="1">
+            <label class="form-check-label" for="1">
+              Adminstrador
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="2" formControlName="2">
+            <label class="form-check-label" for="2">
+              Avaliador
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="3" formControlName="3">
+            <label class="form-check-label" for="3">
+              Avaliado
+            </label>
+          </div>
+          <button class="btn btn-primary" type="submit" [disabled]="!userForm.valid" 
+            data-toggle="modal" data-target="#msgModal">
+              Salvar
+          </button>
+          <button class="btn btn-danger ml-1" (click)="onCancel()">Cancelar</button>
+      </form>    
+    </div>
+  </div>
+</div>
+

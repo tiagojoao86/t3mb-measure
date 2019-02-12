@@ -1,0 +1,40 @@
+<div class="container border">
+  <div class="row">
+    <div class="col-md-6 col-xs-6">
+      <h3>{{ editMode ? cycle.name : 'Novo Ciclo'}}</h3>
+    </div>
+  </div>
+  <div class="row">
+      <div class="col-md-6 col-xs-6">
+      <form [formGroup]="cycleForm" (ngSubmit)="onSubmit()" >        
+          <div class="form-group">
+            <label for="id">ID</label>
+            <input type="text" id="id" formControlName="id" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" formControlName="name" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="startDate">Data de Incio</label>
+            <input type="date" id="startDate" formControlName="startDate" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="status">Status</label>
+            <select id="status" formControlName="status" class="form-control" 
+              (change)="onChangeStatus($event.target.selectedOptions[0].id)">
+              <option *ngFor='let statusEl of cyclesService.statusList' [value]='statusEl' [id]='statusEl.id'>
+                {{ statusEl }}
+              </option>              
+            </select>
+          </div>
+          <button class="btn btn-primary" type="submit" [disabled]="!cycleForm.valid" 
+            data-toggle="modal" data-target="#msgModal">
+              Salvar
+          </button>
+          <button class="btn btn-danger ml-1" (click)="onCancel()">Cancelar</button>
+      </form>    
+    </div>
+  </div>
+</div>
+

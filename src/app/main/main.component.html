@@ -1,0 +1,34 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand col-sm-3 col-md-2" href="#">T3MB - Mesure</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" 
+                        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown" *ngFor="let menu of mainMenu">
+          <a class="nav-link dropdown-toggle" id="teste"
+            role="button" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false" style="cursor: pointer"> {{ menu.name }}
+          </a>
+          <div class="dropdown-menu" aria-labelledby="teste">
+              <a *ngFor="let subMenu of menu.subFunctions" class="dropdown-item" routerLink="{{ subMenu.url }}">
+                {{ subMenu.name }}</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <span class="navbar-text">
+      <a (click)="onLogout()" style="cursor: pointer">Sair</a>
+    </span>    
+</nav>
+
+<nav aria-label="breadcrumb" class='col-md-12 col-sm-12'>
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active" *ngFor="let url of urls">
+      <a class="h6" routerLink="{{url.url}}">{{url.label}}</a>
+    </li>
+  </ol>
+</nav>
+<app-message></app-message>
+<router-outlet></router-outlet>

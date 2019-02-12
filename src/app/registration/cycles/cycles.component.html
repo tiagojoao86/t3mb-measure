@@ -1,0 +1,56 @@
+<div class="container border py-3">
+  <div class="row">
+    <div class="col-md-12 col-sm-12">
+      <h3>Cadastro de Ciclos</h3>
+    </div>
+  </div>
+  <div class="row py-1">
+    <div class="col-md-8">
+        <form (ngSubmit)="onSearch(f)" #f="ngForm" class="form-inline ">
+          <div class="form-group">
+            <div class="col-md-2">
+              <label for="search">Localizar:</label>
+            </div>
+            <div class="col-md-6">
+              <input type="text" id="search" name="search" ngModel class="form-control" placeholder="Localizar pelo nome">
+            </div>
+            <div class="col-md-2">
+              <button class="btn btn-primary" type="submit">Pesquisar</button>
+            </div>
+          </div>        
+      </form>
+    </div>
+    <span class="col-md-4">
+      <button class="btn btn-success" (click)="onCreate()">Adicionar</button>
+    </span>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Nome</th>
+            <th scope="col">Data de Inicio</th>
+            <th scope="col">Status</th>
+            <th scope="col">Ação</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cycle of cyclesList">
+            <th scope="row">{{ cycle.id }}</th>
+            <td>{{ cycle.name }}</td>
+            <td>{{ cycle.startDate | date: 'shortDate' }}</td>
+            <td>{{ cycle.status.name }}</td>
+            <td>
+              <a  style="cursor: pointer;"
+              (click)="onEdit(cycle.id)"><span class="badge badge-primary badge-pill">
+                Editar
+              </span> </a>
+            </td>
+          </tr>           
+        </tbody>
+      </table>     
+    </div>
+  </div>
+</div>
