@@ -38,6 +38,7 @@ export class EvaluationTypeEditComponent implements OnInit {
     );
 
     this.initForm();
+    console.log((<FormArray>this.evaluationTypeForm.get('concepts')).controls);
 
 
   }
@@ -55,12 +56,13 @@ export class EvaluationTypeEditComponent implements OnInit {
     if (this.editMode) {
       if (this.evaluationType['concepts']) {
         for (let concept of this.evaluationType.concepts) {
+          console.log(concept);
           evaluationTypeConcepts.push(
             new FormGroup({
               'id': new FormControl({value: concept.id, disabled: true}, Validators.required),
-              'description': new FormControl({value: concept.id}, Validators.required),
-              'hint': new FormControl({value: concept.id}, Validators.required),
-              'weight': new FormControl({value: concept.id}, Validators.required),
+              'description': new FormControl(concept.description, Validators.required),
+              'hint': new FormControl(concept.hint, Validators.required),
+              'weight': new FormControl(concept.weight, Validators.required),
             })
           );
         }
@@ -78,6 +80,10 @@ export class EvaluationTypeEditComponent implements OnInit {
 
   onChangeGroup(id: number) {
     
+  }
+
+  getControls() {
+    return (<FormArray>this.evaluationTypeForm.get('concepts')).controls;
   }
 
 }
