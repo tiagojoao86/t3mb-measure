@@ -1,0 +1,27 @@
+<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 py-3 px-0">
+  <form [formGroup]="dropdownForm" (ngSubmit)="onSubmit()">
+    <div class="form-group col-sm-5 col-md-5 col-lg-5 col-xl-5 d-inline p-0">
+      <label for="userGroups d-inline">Grupo de Usuários:</label>
+      <select id="userGroups" formControlName="userGroups" 
+      class="form-control col-sm-4 col-md-4 col-lg-4 col-xl-4 d-inline mx-1" 
+      (change)="onChangeUserGroup($event.target.selectedOptions[0].id)">
+        <option *ngFor='let userGroup of userGroups' [value]='userGroup' [id]='userGroup.id'>
+          {{ userGroup }}
+        </option>              
+      </select>
+    </div>
+      <div class="form-group col-md-5 col-xs-5 d-inline p-0">
+        <label for="evaluationTypes d-inline">Tipo de Avaliação:</label>
+        <select id="evaluationTypes" formControlName="evaluationTypes" 
+        class="form-control col-sm-4 col-md-4 col-lg-4 col-xl-4 d-inline mx-1" 
+        (change)="onChangeEvaluationType($event.target.selectedOptions[0].id)">
+          <option *ngFor='let evaluationType of evaluationTypes' [value]='evaluationType' [id]='evaluationType.id'>
+            {{ evaluationType }}
+          </option>              
+        </select>
+      </div>
+      <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2 d-inline">
+        <button class="btn btn-danger mb-1" (click)="onRemoveConfiguration()">-</button>
+      </div>
+  </form>
+</div>

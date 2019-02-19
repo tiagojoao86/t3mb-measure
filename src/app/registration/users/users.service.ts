@@ -112,6 +112,10 @@ export class UsersService {
         return result;
     }
 
+    getUsersGroup(): Array<UserGroup> {
+        return this.userGroups;
+    }
+
 
 
     

@@ -3,6 +3,7 @@ import { Cycle } from './cycle';
 import { CyclesService } from './cycles.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-cycles',
@@ -27,6 +28,12 @@ export class CyclesComponent implements OnInit {
   onEdit(id: number) {
     this.router.navigate([id], {relativeTo: this.route});
   }
+
+  onConfigure(id: number) {
+    this.router.navigate(['cycles-configuration/'+id], {relativeTo: this.route});
+  }
+
+  
 
   onCreate() {
     this.router.navigate(['new'], {relativeTo: this.route});

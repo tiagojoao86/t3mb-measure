@@ -23,6 +23,8 @@ import { UsersService } from './registration/users/users.service';
 import { RolesService } from './roles/roles.service';
 import { EvaluationTypeComponent } from './registration/evaluations/evaluation-type/evaluation-type.component';
 import { EvaluationTypeEditComponent } from './registration/evaluations/evaluation-type/evaluation-type-edit/evaluation-type-edit.component';
+import { CylesConfigurationComponent } from './registration/cycles/cyles-configuration/cyles-configuration.component';
+import { CycleConfigurationDropdownComponent } from './registration/cycles/cyles-configuration/cycle-configuration-dropdown/cycle-configuration-dropdown.component';
 
 
 registerLocaleData(localePt, 'pt-BR', localePtExtra);
@@ -39,7 +41,9 @@ registerLocaleData(localePt, 'pt-BR', localePtExtra);
     CyclesComponent,
     CyclesEditComponent,
     EvaluationTypeComponent,
-    EvaluationTypeEditComponent
+    EvaluationTypeEditComponent,
+    CylesConfigurationComponent,
+    CycleConfigurationDropdownComponent
   ],
   imports: [
     BrowserModule,

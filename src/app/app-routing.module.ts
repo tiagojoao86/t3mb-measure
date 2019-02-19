@@ -10,6 +10,7 @@ import { EvaluationTypeComponent } from './registration/evaluations/evaluation-t
 import { RegistrationComponent } from './registration/registration.component';
 import { UserEditComponent } from './registration/users/user-edit/user-edit.component';
 import { UsersComponent } from './registration/users/users.component';
+import { CylesConfigurationComponent } from './registration/cycles/cyles-configuration/cyles-configuration.component';
 
 const routes: Routes = [
   { path: '', component: MainComponent, data: {breadcrumb: 'Home'}, canActivate: [AuthGuard],
@@ -20,6 +21,7 @@ const routes: Routes = [
           { path: 'users/:id', component: UserEditComponent, data: {breadcrumb: 'Usuários'}},
           { path: 'cycles', component: CyclesComponent, data: {breadcrumb: 'Ciclos'}},  
           { path: 'cycles/:id', component: CyclesEditComponent, data: {breadcrumb: 'Ciclos'}},
+          { path: 'cycles/cycles-configuration/:id', component: CylesConfigurationComponent , data: {breadcrumb: 'Ciclos'}},
           { path: 'evaluations-type', component: EvaluationTypeComponent, data: {breadcrumb: 'Tipos de Avaliações'}},  
           { path: 'evaluations-type/:id', component: EvaluationTypeEditComponent, data: {breadcrumb: 'Tipos de Avaliações'}}
         ]},

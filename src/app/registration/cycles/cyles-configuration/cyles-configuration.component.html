@@ -1,0 +1,24 @@
+<div class="container border">
+  <div class="row">
+    <div class="col-md-6 col-xs-6">
+      <h3>Ciclo: {{ cycle.name }}</h3>
+    </div>
+  </div>
+  <div class="row">
+      <div class="col-md-12 col-xs-12">
+        <form [formGroup]="configurationForm" (ngSubmit)="onSubmit()" >
+          <button type="button" class="btn btn-success" (click)="onAddConfiguration()">Adicionar Configuração</button>
+            <app-cycle-configuration-dropdown
+              *ngFor="let configuration of cycle.configurations; let i = index"
+              [configuration]="configuration" [index]="i"
+            ></app-cycle-configuration-dropdown>
+
+          <button class="btn btn-primary" type="submit" [disabled]="!configurationForm.valid" 
+            data-toggle="modal" data-target="#msgModal">
+              Salvar
+          </button>
+          <button type="button" class="btn btn-danger ml-1" (click)="onCancel()">Cancelar</button>
+        </form>
+      </div>
+  </div>
+</div> 

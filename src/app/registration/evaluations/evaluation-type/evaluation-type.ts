@@ -69,6 +69,10 @@ export class EvaluationType {
             result += (element.agreement * element.weight);
         });
         return result;
-    }   
+    } 
+
+    toString() {
+        return '('+this.id+') '+this.description;
+    }
 
 }

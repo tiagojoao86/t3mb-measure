@@ -4,6 +4,8 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { MessageService } from 'src/app/message-service/message.service';
 import { EvaluationTypeService } from '../evaluation-type.service';
 import { EvaluationType } from '../evaluation-type';
+import { Concept } from '../concept';
+import { MessageSended } from 'src/app/message-service/message-sended';
 
 @Component({
   selector: 'app-evaluation-type-edit',
@@ -37,17 +39,50 @@ export class EvaluationTypeEditComponent implements OnInit {
         }
     );
 
-    this.initForm();    
-
-
+    this.initForm();
   }
 
   onSubmit (){
+    let newEvaluationType: EvaluationType = new EvaluationType(
+      this.evaluationTypeForm.get('id').value,
+      this.evaluationTypeForm.get('description').value
+    );
+    
+
+    let VALID: boolean = true;
+    let newConcepts: Array<Concept> = new Array<Concept>();
+    for (let formGroup of this.getControls()) {
+      VALID = formGroup.valid;
+      let concept: Concept = new Concept(
+        formGroup.get('id').value,
+        formGroup.get('description').value,
+        formGroup.get('hint').value,
+        formGroup.get('weight').value
+      );
+      newConcepts.push(concept);        
+    }
+    newEvaluationType.concepts = newConcepts;
+
+    if (VALID) {
+      if (this.editMode) {
+        this.evaluationTypeService.updateEvaluationType(newEvaluationType)
+        this.messageService.showMessage(new MessageSended('Tipo de Avaliação alterada com sucesso', 'Informação'));        
+      }
+      else {
+        this.evaluationTypeService.addEvaluationType(newEvaluationType)
+        this.messageService.showMessage(new MessageSended('Tipo de Avaliação cadastrada com sucesso', 'Informação'));
+      }
+      this.router.navigate(['/registration/evaluations-type']);
+    }
+    else {
+      this.messageService.showMessage(new MessageSended('Favor verificar se todos os campos estão preenchidos', 'Erro'));
+    }
+    
     
   }
 
   onCancel() {
-   
+    this.router.navigate(['/registration/evaluations-type']);
   }
 
   initForm() {
@@ -68,26 +103,32 @@ export class EvaluationTypeEditComponent implements OnInit {
       this.evaluationTypeForm = new FormGroup({
         'id': new FormControl({value: this.evaluationType.id, disabled: true }, Validators.required),
         'description': new FormControl(this.evaluationType.description, Validators.required),
-        'concepts': evaluationTypeConcepts
-        
+        'concepts': evaluationTypeConcepts        
       });
     }
-    
-    
+    else {
+      this.evaluationTypeForm = new FormGroup({
+        'id': new FormControl({value: this.evaluationTypeService.getNextEvaluationTypeId(), disabled: true }, Validators.required),
+        'description': new FormControl(null, Validators.required),
+        'concepts': evaluationTypeConcepts        
+      });
+    }
   }
 
   onDeleteConcept(i: number) {
     (<FormArray>this.evaluationTypeForm.get('concepts')).controls.splice(i,1);
+    this.evaluationTypeForm.get('concepts').updateValueAndValidity();
+    this.evaluationTypeForm.updateValueAndValidity();
   }
 
   onAddConcept(i: number) {
     (<FormArray>this.evaluationTypeForm.get('concepts')).controls.splice(i+1,0,
       new FormGroup({
-        'id': new FormControl({value: null, disabled: true}, Validators.required),
+        'id': new FormControl({value: this.evaluationTypeService.getNextConceptId(), disabled: true}, Validators.required),
         'description': new FormControl(null, Validators.required),
         'hint': new FormControl(null, Validators.required),
         'weight': new FormControl(null, Validators.required),
-      }));
+      }));            
   }
 
   getControls() {

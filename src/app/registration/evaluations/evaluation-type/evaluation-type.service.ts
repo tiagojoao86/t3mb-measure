@@ -4,31 +4,34 @@ import { EvaluationType } from './evaluation-type';
 import { UsersService } from '../../users/users.service';
 
 @Injectable()
-export class EvaluationTypeService {    
+export class EvaluationTypeService {
+    
+    conceptId: number = 0;
+    evaluationTypeId: number = 0;
 
     concepts: Array<Concept> = new Array<Concept>(
-        new Concept(1,'Pro-Atividade', 'Considerar Pró-Atividade do Colaborador', 1),
-        new Concept(2,'Qualidade do trabalho executado', 'Considerar a qualidade das entregas', 1),
-        new Concept(3,'Pontualidade', 'Considerar a pontualidade', 1),
-        new Concept(4,'Maturidade', 'Considerar a maturidade', 1),
+        new Concept(this.getNextConceptId(),'Pro-Atividade', 'Considerar Pró-Atividade do Colaborador', 1),
+        new Concept(this.getNextConceptId(),'Qualidade do trabalho executado', 'Considerar a qualidade das entregas', 1),
+        new Concept(this.getNextConceptId(),'Pontualidade', 'Considerar a pontualidade', 1),
+        new Concept(this.getNextConceptId(),'Maturidade', 'Considerar a maturidade', 1),
     );
 
-    evaluationsType: Array<EvaluationType> = new Array<EvaluationType>(
-        new EvaluationType(1,"Avaliação Recepcionistas")
+    evaluationTypes: Array<EvaluationType> = new Array<EvaluationType>(
+        new EvaluationType(this.getNextEvaluationTypeId(),"Avaliação Recepcionistas")
     );
 
     constructor(private usersService: UsersService) {
-        this.evaluationsType[0].addQuestions(this.concepts);
+        this.evaluationTypes[0].addQuestions(this.concepts);
     }
 
     addEvaluationType(evaluationType: EvaluationType) {
-        this.evaluationsType.push(evaluationType);
+        this.evaluationTypes.push(evaluationType);
     }
 
     updateEvaluationType(evaluationType: EvaluationType) {
-       for (let i = 0; i < this.evaluationsType.length; i++) {
-           if (this.evaluationsType[i].id == evaluationType.id) {
-               this.evaluationsType[i] = evaluationType;
+       for (let i = 0; i < this.evaluationTypes.length; i++) {
+           if (this.evaluationTypes[i].id == evaluationType.id) {
+               this.evaluationTypes[i] = evaluationType;
            }
        }
     }
@@ -36,7 +39,7 @@ export class EvaluationTypeService {
     getEvaluationsTypeByDescription(description: string): Array<EvaluationType> {
         let result: Array<EvaluationType> = new Array<EvaluationType>();
 
-        this.evaluationsType.forEach(element => {
+        this.evaluationTypes.forEach(element => {
             if (element.description.toUpperCase().search(description.toUpperCase()) > -1) {
                 result.push(element);
             }
@@ -48,13 +51,27 @@ export class EvaluationTypeService {
     getEvaluationTypeById(id: number) {
         let result: EvaluationType;
 
-        this.evaluationsType.forEach(element => {
+        this.evaluationTypes.forEach(element => {
             if (element.id == id) {
                 result = element;
             }
         })
 
         return result;
+    }
+
+    getNextConceptId(): number {
+        this.conceptId++;
+        return this.conceptId;
+    }
+
+    getNextEvaluationTypeId(): number {
+        this.evaluationTypeId++;
+        return this.evaluationTypeId;
+    }
+
+    getEvaluationTypes(): Array<EvaluationType> {
+        return this.evaluationTypes;
     }
 
 
