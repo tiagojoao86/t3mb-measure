@@ -17,11 +17,23 @@ export class UsersService {
             new User(1,'Administrador','admin','123456', [rolesService.getRoleById(1)], this.getGroupById(1), 'A'),
             new User(2,'Avaliador', 'avaliador', '123456', [rolesService.getRoleById(2),rolesService.getRoleById(3)],
                     this.getGroupById(2), 'A'),
-            new User(3, 'Avaliado', 'avaliado', '123456', [rolesService.getRoleById(2)], 
+            new User(3, 'Avaliado', 'avaliado', '123456', [rolesService.getRoleById(3)], 
                 this.getGroupById(3), 'A'),
-            new User(4, 'Avaliado 2', 'avaliado2', '123456', [rolesService.getRoleById(2)], 
+            new User(4, 'Avaliado 2', 'avaliado2', '123456', [rolesService.getRoleById(3)], 
                 this.getGroupById(3), 'I'),
-        );  
+        );
+        this.getUserById(3).superior = this.getUserById(2);
+        this.getUserById(3).hasSuperior = true;
+        
+        this.getUserById(1).superior = null;
+        this.getUserById(1).hasSuperior = false;
+
+        this.getUserById(2).superior = null;
+        this.getUserById(2).hasSuperior = false;
+
+        this.getUserById(4).superior = null;
+        this.getUserById(4).hasSuperior = false;
+        
     }  
 
     getUsers(): Array<User> {
@@ -41,7 +53,7 @@ export class UsersService {
     getUserById(id: number): User {
         var user: User = null;        
         this.users.forEach(element => {
-            if (element.id === id){
+            if (element.id == id){
                 user = element;
             }
         });
@@ -77,6 +89,17 @@ export class UsersService {
                 result.push(element);
             }
         })
+        return result;
+    }
+
+    getSuperiors(): Array<User> {
+        let result: Array<User> = new Array<User>();
+        this.users.forEach(element => {
+            if (element.isRolePresent(2)) {
+                result.push(element);
+            }
+        });
+
         return result;
     }
 

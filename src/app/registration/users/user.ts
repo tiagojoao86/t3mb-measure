@@ -7,6 +7,8 @@ export class User {
     password: String;
     roles: Role[];
     userGroup: UserGroup;
+    superior: User;
+    hasSuperior: boolean;
     status: string;
 
     constructor(id: number, name: string, login: string, password: string, roles: Role[],
@@ -38,6 +40,10 @@ export class User {
         else {
             return false;
         }
+    }
+
+    toString() : string {
+        return '('+this.id+') '+this.name;
     }
     
 }

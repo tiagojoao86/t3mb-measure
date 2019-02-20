@@ -8,6 +8,7 @@ import { MessageSended } from 'src/app/message-service/message-sended';
 import { RolesService } from 'src/app/roles/roles.service';
 import { UsersService } from '../users.service';
 import { MessageService } from 'src/app/message-service/message.service';
+import { DISABLED } from '@angular/forms/src/model';
 
 @Component({
   selector: 'app-user-edit',
@@ -20,6 +21,9 @@ export class UserEditComponent implements OnInit {
   userForm : FormGroup;
   editMode: boolean = false;
   selectedGroup: UserGroup;
+  selectedSuperior: User;
+  hasSuperior: boolean;
+  superiorsList: Array<User> = new Array<User>();
 
   
 
@@ -42,7 +46,7 @@ export class UserEditComponent implements OnInit {
           }          
         }
     );
-
+    this.superiorsList = this.usersService.getSuperiors();
     this.initForm();
 
 
@@ -59,6 +63,11 @@ export class UserEditComponent implements OnInit {
     if (this.userForm.value['3'] == true){
       newRoles.push(this.rolesService.getRoleById(3));
     }
+    if (this.userForm.value['hasSuperior'] == true){
+      this.hasSuperior = true;
+    } else {
+      this.hasSuperior = false;
+    }
     let user: User = new User(
       this.userForm.getRawValue().id,
       this.userForm.value['name'],
@@ -66,8 +75,10 @@ export class UserEditComponent implements OnInit {
       this.userForm.value['password'],
       newRoles,
       this.selectedGroup,
-      this.userForm.value['A'] ? 'A' : 'I' 
+      this.userForm.value['A'] ? 'A' : 'I'      
     );
+    user.superior = this.selectedSuperior;
+    user.hasSuperior = this.hasSuperior;
     if (this.editMode) {
       this.usersService.updateUser(user);
       this.messageService.showMessage(new MessageSended('Usuario alterado com sucesso', 'Informação'));
@@ -86,9 +97,9 @@ export class UserEditComponent implements OnInit {
   }
 
   initForm() {
-    console.log(this.user);
     if (this.editMode) {
       this.selectedGroup = this.user.userGroup;
+      this.selectedSuperior = this.user.superior;
       this.userForm = new FormGroup({
         'id': new FormControl({value: this.user.id, disabled: true }, Validators.required),
         'login': new FormControl(this.user.login, Validators.required),
@@ -98,7 +109,9 @@ export class UserEditComponent implements OnInit {
         '2': new FormControl(this.user.isRolePresent(2)),
         '3': new FormControl(this.user.isRolePresent(3)),
         'A': new FormControl(this.user.isActive()),
-        'userGroup': new FormControl(this.selectedGroup, Validators.required)
+        'userGroup': new FormControl(this.selectedGroup, Validators.required),
+        'superior': new FormControl(this.selectedSuperior),
+        'hasSuperior': new FormControl(this.user.hasSuperior)
       });
     }
     else {
@@ -111,14 +124,48 @@ export class UserEditComponent implements OnInit {
         '2': new FormControl(false),
         '3': new FormControl({value: true}),
         'A': new FormControl(this.user.isActive()),
-        'userGroup': new FormControl(this.selectedGroup, Validators.required)
+        'userGroup': new FormControl(this.selectedGroup, Validators.required),
+        'superior': new FormControl(null),
+        'hasSuperior': new FormControl(true)
       });
     }
+    
+    this.onChangeHasSuperior();
     
   }
 
   onChangeGroup(id: number) {
     this.selectedGroup = this.usersService.getGroupById(id);
+  }
+
+  onChangeSuperior(id: number) {
+    this.selectedSuperior = this.usersService.getUserById(id);
+  }
+
+  onChangeHasSuperior() {
+    if (this.userForm.get('hasSuperior').value == true) {
+      this.hasSuperior = true;
+      this.userForm.get('superior').enable();
+    }
+    else {      
+      this.hasSuperior = false;
+      this.selectedSuperior = null
+      this.userForm.get('superior').disable();
+      this.userForm.get('superior').setValue(null);
+    }
+
+    this.setUserSuperiorValidator();
+  }
+
+  setUserSuperiorValidator() {
+    if (this.hasSuperior) {
+      this.userForm.get('superior').setValidators([Validators.required]);
+    }
+    else {
+      this.userForm.get('superior').setValidators([]);
+      this.userForm.get('superior').setValue(null);
+      this.selectedSuperior = null;
+    }
   }
 
 }
