@@ -37,26 +37,17 @@ export class AuthService {
     verifyFunction(url: string): boolean {
         var result = false;
         this.loggedUser.roles.forEach(element => {
-            result = this.verifyAllFunctions(element.sysFunctions, url);
+            element.sysFunctions.forEach(sysFunction => {
+                if (sysFunction.url == url) {
+                    result = true;
+                }
+                sysFunction.subFunctions.forEach(subFunction => {
+                    if (subFunction.url == url) {
+                        result = true;
+                    } 
+                })
+            })           
         })
         return result;
     }
-
-    private verifyAllFunctions(sysFunctions: Array<SysFunction>, url: string): boolean {
-        var result = false;
-        var i = 0;
-        for (i = 0; i < sysFunctions.length; i++){
-            if ((sysFunctions[i].url) == url) {
-                result = true;
-                break;                
-                
-            }
-            if (sysFunctions[i].subFunctions.length > 0){
-                result = this.verifyAllFunctions(sysFunctions[i].subFunctions, url);
-            }
-        }
-        return result;
-    }
-
-
 }

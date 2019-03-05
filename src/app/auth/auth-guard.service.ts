@@ -15,6 +15,7 @@ export class AuthGuard implements CanActivate {
                 return true;
             }
             else {
+                
                 if (this.authService.verifyFunction(state.url)){
                     console.log('Permissao de acesso concedida');
                     return true;

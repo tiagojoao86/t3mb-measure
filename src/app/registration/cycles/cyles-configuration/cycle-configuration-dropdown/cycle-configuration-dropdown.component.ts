@@ -1,10 +1,12 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { UserGroup } from 'src/app/registration/users/user';
 import { EvaluationType } from 'src/app/registration/evaluations/evaluation-type/evaluation-type';
 import { UsersService } from 'src/app/registration/users/users.service';
 import { EvaluationTypeService } from 'src/app/registration/evaluations/evaluation-type/evaluation-type.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CyclesService } from '../../cycles.service';
+import { Cycle } from '../../cycle';
+import { CycleConfiguration } from '../../cycle-configuration';
 
 @Component({
   selector: 'app-cycle-configuration-dropdown',
@@ -13,8 +15,11 @@ import { CyclesService } from '../../cycles.service';
 })
 export class CycleConfigurationDropdownComponent implements OnInit {
 
-  @Input() configuration:{userGroup: UserGroup, evaluationType: EvaluationType};  
+  @Input() configuration: CycleConfiguration;;  
   @Input() index: number;
+  @Input() statusId: number;
+  @Output() updateConfiguration = new EventEmitter<{id: number, index: number, type: number}>();
+  @Output() removeConfiguration = new EventEmitter<{index: number}>();
   userGroups: Array<UserGroup> = new Array<UserGroup>();
   evaluationTypes: Array<EvaluationType> = new Array<EvaluationType>();
 
@@ -22,7 +27,6 @@ export class CycleConfigurationDropdownComponent implements OnInit {
 
   constructor(private usersService: UsersService, 
     private evaluationTypeService: EvaluationTypeService,
-    private cyclesService: CyclesService,
     private formBuilder: FormBuilder) { }
 
   ngOnInit() {
@@ -33,23 +37,28 @@ export class CycleConfigurationDropdownComponent implements OnInit {
 
   initForm() {
     this.dropdownForm = this.formBuilder.group({
+      id: [{value: this.configuration.id, disabled: true}],
       userGroups: [this.configuration.userGroup, Validators.required],
       evaluationTypes: [this.configuration.evaluationType, Validators.required]
     });
+    if (this.statusId == 2) {
+      this.dropdownForm.disable();
+    }   
   };
 
   onChangeUserGroup(id: number) {
     let data = {id: id, index: this.index, type: 1};
-    this.cyclesService.updateConfiguration.next(data);
+    this.updateConfiguration.emit(data);
   }
 
   onChangeEvaluationType(id: number) {
     let data = {id: id, index: this.index, type: 2};
-    this.cyclesService.updateConfiguration.next(data);
+    this.updateConfiguration.emit(data);
   }
 
   onRemoveConfiguration() {
-    this.cyclesService.removeConfiguration.next(this.index);
+    let data = {index: this.index};
+    this.removeConfiguration.emit(data);
   }
 
 }

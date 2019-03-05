@@ -35,14 +35,13 @@ export class CyclesEditComponent implements OnInit {
             this.editMode = true;
           }
           else {
+            this.cycle = new Cycle(this.cyclesService.getNextId(),'', 
+                                  new Date(), this.cyclesService.getCycleStatusById(1));
             this.editMode = false;
           }          
         }
     );
-
     this.initForm();
-
-
   }
 
   onSubmit (){
@@ -78,16 +77,22 @@ export class CyclesEditComponent implements OnInit {
         'startDate': new FormControl(formatDate(this.cycle.startDate, 'yyyy-MM-dd', 'pt-BR'), Validators.required),
         'status': new FormControl(this.selectedStatus,Validators.required)
       });
+
+      if (this.cycle.status.id == 2) {
+        this.cycleForm.disable();
+      }
       
     }
     else {
       this.cycleForm = new FormGroup({
-        'id': new FormControl({value: this.cyclesService.getNextId(), disabled: true}, Validators.required),
-        'name': new FormControl('', Validators.required),
-        'startDate': new FormControl(formatDate(new Date(), 'yyyy-MM-dd', 'pt-BR'), Validators.required),
+        'id': new FormControl({value: this.cycle.id, disabled: true}, Validators.required),
+        'name': new FormControl(this.cycle.name, Validators.required),
+        'startDate': new FormControl(formatDate(this.cycle.startDate, 'yyyy-MM-dd', 'pt-BR'), Validators.required),
         'status': new FormControl(this.selectedStatus, Validators.required)
       });
     }
+
+    
   }
 
   onChangeStatus(statusId: number) {

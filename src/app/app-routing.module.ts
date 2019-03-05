@@ -11,6 +11,9 @@ import { RegistrationComponent } from './registration/registration.component';
 import { UserEditComponent } from './registration/users/user-edit/user-edit.component';
 import { UsersComponent } from './registration/users/users.component';
 import { CylesConfigurationComponent } from './registration/cycles/cyles-configuration/cyles-configuration.component';
+import { EvaluationsComponent } from './evaluations/evaluations.component';
+import { MyEvaluationsComponent } from './evaluations/my-evaluations/my-evaluations.component';
+import { CompleteEvaluationComponent } from './evaluations/complete-evaluation/complete-evaluation.component';
 
 const routes: Routes = [
   { path: '', component: MainComponent, data: {breadcrumb: 'Home'}, canActivate: [AuthGuard],
@@ -25,6 +28,11 @@ const routes: Routes = [
           { path: 'evaluations-type', component: EvaluationTypeComponent, data: {breadcrumb: 'Tipos de Avaliações'}},  
           { path: 'evaluations-type/:id', component: EvaluationTypeEditComponent, data: {breadcrumb: 'Tipos de Avaliações'}}
         ]},
+        { path: 'evaluations', component: EvaluationsComponent, data: {breadcrumb: 'Avaliações'}, 
+                              canActivate: [AuthGuard], children: [
+          { path: 'my-evaluations', component: MyEvaluationsComponent, data: {breadcrumb: 'Minhas Avaliacões'}},
+          { path: 'complete-evaluation/:id', component: CompleteEvaluationComponent, data: {breadcrumb: 'Completar Avaliação'}},
+        ]}
       ]},
   { path: 'login', component: LoginComponent},  
   

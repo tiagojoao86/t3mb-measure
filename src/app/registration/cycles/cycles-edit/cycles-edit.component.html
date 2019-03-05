@@ -6,7 +6,10 @@
   </div>
   <div class="row">
       <div class="col-md-6 col-xs-6">
-      <form [formGroup]="cycleForm" (ngSubmit)="onSubmit()" >        
+      <form [formGroup]="cycleForm" (ngSubmit)="onSubmit()" >
+          <div class="alert alert-info" role="alert" *ngIf="this.cycle.status.id == 2">
+            Você não pode alterar um ciclo já encerrado.
+          </div>       
           <div class="form-group">
             <label for="id">ID</label>
             <input type="text" id="id" formControlName="id" class="form-control">

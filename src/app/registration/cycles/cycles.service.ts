@@ -5,9 +5,13 @@ import { UserGroup } from '../users/user';
 import { EvaluationType } from '../evaluations/evaluation-type/evaluation-type';
 import { UsersService } from '../users/users.service';
 import { EvaluationTypeService } from '../evaluations/evaluation-type/evaluation-type.service';
-import { Subject } from 'rxjs';
+import { Subject, BehaviorSubject } from 'rxjs';
+import { CycleConfiguration } from './cycle-configuration';
 @Injectable()
 export class CyclesService {
+
+    cycleId: number = 0;
+    cycleConfigurationId: number = 0;
 
     removeConfiguration = new Subject();
     updateConfiguration = new Subject();
@@ -20,17 +24,23 @@ export class CyclesService {
     constructor(private usersService: UsersService, private evaluationTypeService: EvaluationTypeService) {
         
         this.cycles = new Array<Cycle>(
-            new Cycle(1,'2017',new Date(2017, 0, 1),this.statusList[1]),
-            new Cycle(2,'2018-A',new Date(2018, 0, 1),this.statusList[1]),
-            new Cycle(3,'2018-B',new Date(2018, 5, 1),this.statusList[1]),
-            new Cycle(4,'2019',new Date(2019, 0, 1),this.statusList[0])
+            new Cycle(this.getNextId(),'2017',new Date(2017, 0, 1),this.statusList[1]),
+            new Cycle(this.getNextId(),'2018-A',new Date(2018, 0, 1),this.statusList[1]),
+            new Cycle(this.getNextId(),'2018-B',new Date(2018, 5, 1),this.statusList[1]),
+            new Cycle(this.getNextId(),'2019',new Date(2019, 0, 1),this.statusList[0])
         );
 
-        this.cycles[0].configurations = [
-            {userGroup: this.usersService.getGroupById(3),
-             evaluationType: this.evaluationTypeService.getEvaluationTypeById(1)}
-        ];
-            
+        this.cycles[0].configurations = new Array<CycleConfiguration>(
+            new CycleConfiguration(this.getNextCycleConfigurationId(), 
+                                    this.evaluationTypeService.getEvaluationTypeById(1),
+                                    this.usersService.getGroupById(3))
+        );
+
+        this.cycles[3].configurations = new Array<CycleConfiguration>(
+            new CycleConfiguration(this.getNextCycleConfigurationId(), 
+                                    this.evaluationTypeService.getEvaluationTypeById(1),
+                                    this.usersService.getGroupById(3))
+        );
         
         
     }  
@@ -75,14 +85,13 @@ export class CyclesService {
     }
 
     getNextId(): number {
-        let result = 0;
-        this.cycles.forEach(element => {
-            if (element.id > result) {
-                result = element.id;
-            }
-        });
-        result++;
-        return result;
+        this.cycleId++;
+        return this.cycleId;
+    }
+
+    getNextCycleConfigurationId(){
+        this.cycleConfigurationId++;
+        return this.cycleConfigurationId;
     }
 
     getCycleStatusById(id: number) : CycleStatus {

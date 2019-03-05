@@ -25,6 +25,10 @@ import { EvaluationTypeComponent } from './registration/evaluations/evaluation-t
 import { EvaluationTypeEditComponent } from './registration/evaluations/evaluation-type/evaluation-type-edit/evaluation-type-edit.component';
 import { CylesConfigurationComponent } from './registration/cycles/cyles-configuration/cyles-configuration.component';
 import { CycleConfigurationDropdownComponent } from './registration/cycles/cyles-configuration/cycle-configuration-dropdown/cycle-configuration-dropdown.component';
+import { MyEvaluationsComponent } from './evaluations/my-evaluations/my-evaluations.component';
+import { EvaluationsComponent } from './evaluations/evaluations.component';
+import { EvaluationsService } from './evaluations/evaluations.service';
+import { CompleteEvaluationComponent } from './evaluations/complete-evaluation/complete-evaluation.component';
 
 
 registerLocaleData(localePt, 'pt-BR', localePtExtra);
@@ -43,7 +47,10 @@ registerLocaleData(localePt, 'pt-BR', localePtExtra);
     EvaluationTypeComponent,
     EvaluationTypeEditComponent,
     CylesConfigurationComponent,
-    CycleConfigurationDropdownComponent
+    CycleConfigurationDropdownComponent,
+    MyEvaluationsComponent,
+    EvaluationsComponent,
+    CompleteEvaluationComponent
   ],
   imports: [
     BrowserModule,
@@ -61,7 +68,8 @@ registerLocaleData(localePt, 'pt-BR', localePtExtra);
       provide: LOCALE_ID,
       useValue: "pt-BR"
     },
-    EvaluationTypeService
+    EvaluationTypeService,
+    EvaluationsService
   ],
   bootstrap: [AppComponent]
 })

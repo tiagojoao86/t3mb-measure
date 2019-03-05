@@ -6,11 +6,17 @@
   </div>
   <div class="row">
       <div class="col-md-12 col-xs-12">
-        <form [formGroup]="configurationForm" (ngSubmit)="onSubmit()" >
-          <button type="button" class="btn btn-success" (click)="onAddConfiguration()">Adicionar Configuração</button>
+        <div class="alert alert-info" role="alert" *ngIf="this.cycle.status.id == 2">
+          Você não pode alterar um ciclo já encerrado.
+        </div>
+        <form [formGroup]="configurationForm" (ngSubmit)="onSubmit()">
+          <button type="button" class="btn btn-success" (click)="onAddConfiguration()" 
+          [disabled]="this.cycle.status.id == 2 ? true : false">Adicionar Configuração</button>
             <app-cycle-configuration-dropdown
-              *ngFor="let configuration of cycle.configurations; let i = index"
-              [configuration]="configuration" [index]="i"
+              *ngFor="let configuration of configurations; let i = index"
+              [configuration]="configuration" [index]="i" [statusId]="cycle.status.id"
+              (updateConfiguration)="onUpdateConfiguration($event)"
+              (removeConfiguration)="onRemoveConfiguration($event)"
             ></app-cycle-configuration-dropdown>
 
           <button class="btn btn-primary" type="submit" [disabled]="!configurationForm.valid" 

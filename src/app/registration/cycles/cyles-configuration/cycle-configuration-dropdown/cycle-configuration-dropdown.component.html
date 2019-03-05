@@ -1,6 +1,35 @@
-<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 py-3 px-0">
+<div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 pt-2 px-0">
   <form [formGroup]="dropdownForm" (ngSubmit)="onSubmit()">
-    <div class="form-group col-sm-5 col-md-5 col-lg-5 col-xl-5 d-inline p-0">
+    <div class="form-group row my-0">
+        <div class="form-group col-md-1">
+          <label for="id">ID</label>
+          <input type="text" class="form-control" id="id" formControlName="id">
+        </div>
+        <div class="form-group col-md-5">
+          <label for="userGroups">Grupos de Usuários</label>
+          <select id="userGroups" class="form-control" formControlName="userGroups"
+                  (change)="onChangeUserGroup($event.target.selectedOptions[0].id)">
+            <option *ngFor='let userGroup of userGroups' [value]='userGroup' [id]='userGroup.id'>{{ userGroup }}</option>
+          </select>
+        </div>
+        <div class="form-group col-md-5">
+          <label for="evaluationTypes">Grupos de Usuários</label>
+          <select id="evaluationTypes" class="form-control" formControlName="evaluationTypes"
+                  (change)="onChangeEvaluationType($event.target.selectedOptions[0].id)">
+            <option *ngFor='let evaluationType of evaluationTypes' [value]='evaluationType' [id]='evaluationType.id'> {{ evaluationType }}</option>
+          </select>
+        </div>
+        <div class="form-group col-md-1">
+            <label for="remove">Ação</label>
+          <button class="btn btn-danger" type="button" (click)="onRemoveConfiguration()" id="remove"
+          [disabled]="statusId == 2 ? true:false">-</button>
+        </div>
+    </div>
+    <!--<div class="form-group col-sm-2 col-md-2 col-lg-2 col-xl-2 d-inline">
+      <input type="text" id="id" formControlName="id" 
+      class="form-control col-sm-2 col-md-2 col-lg-2 col-xl-2 d-inline">
+    </div>
+    <div class="form-group col-sm-4 col-md-4 col-lg-4 col-xl-4 d-inline p-0">
       <label for="userGroups d-inline">Grupo de Usuários:</label>
       <select id="userGroups" formControlName="userGroups" 
       class="form-control col-sm-4 col-md-4 col-lg-4 col-xl-4 d-inline mx-1" 
@@ -10,7 +39,7 @@
         </option>              
       </select>
     </div>
-      <div class="form-group col-md-5 col-xs-5 d-inline p-0">
+      <div class="form-group col-md-4 col-xs-4 d-inline p-0">
         <label for="evaluationTypes d-inline">Tipo de Avaliação:</label>
         <select id="evaluationTypes" formControlName="evaluationTypes" 
         class="form-control col-sm-4 col-md-4 col-lg-4 col-xl-4 d-inline mx-1" 
@@ -21,7 +50,9 @@
         </select>
       </div>
       <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2 d-inline">
-        <button class="btn btn-danger mb-1" type="button" (click)="onRemoveConfiguration()">-</button>
-      </div>
+        <button class="btn btn-danger mb-1" type="button" (click)="onRemoveConfiguration()"
+        [disabled]="statusId == 2 ? true:false">-</button>
+      </div>-->
+
   </form>
 </div>

@@ -1,0 +1,77 @@
+<div class="container border">
+  <div class="row">
+    <div class="col-md-12 col-xs-12">
+      <h3> Completar Avaliação</h3>
+      <h3> Etapa: {{evaluation.status.description}}</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 col-xs-12">
+      <form [formGroup]="evaluationForm" (ngSubmit)="onSubmit()">
+        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+          <label for="mesured">Avaliado</label>
+          <input type="text" id="mesured" formControlName="mesured" class="form-control">
+        </div>
+        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+          <label for="mesurer">Avaliador</label>
+          <input type="text" id="mesurer" formControlName="mesurer" class="form-control">
+        </div>
+        <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
+          <label for="description">Descrição</label>
+          <input type="text" id="description" formControlName="description" class="form-control">
+        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Descrição</th>
+              <th scope="col">Info</th>
+              <th scope="col">Auto</th>
+              <th scope="col">Justificativa</th>
+              <th scope="col" *ngIf="typeAcess == 2">Superior</th>
+              <th scope="col" *ngIf="typeAcess == 2">Consenso</th>
+            </tr>
+          </thead>
+          <tbody formArrayName="concepts">
+            <tr *ngFor="let questionCtrl of getConceptsControl(); let i = index" [formGroupName]="i" style="margin-top: 10px;">
+              <td style="width: 10.00%">
+                <input type="text" class="form-control" formControlName="id">
+              </td>
+              <td style="width: 30.00%">
+                <textarea type="text" class="form-control" rows="5" formControlName="description"></textarea>
+              </td>
+              <td style="width: 5.00%">
+                <button type="button" class="btn btn-primary" (click)="showHint(i)"
+                  data-toggle="modal" data-target="#msgModal">?</button> 
+              </td>
+              <td style="width: 10.00%">
+                <input type="number" class="form-control" formControlName="ownNote">
+              </td>
+              <td style="width: 25.00%">
+                <textarea type="text" class="form-control" rows="5" formControlName="ownJustify">                  
+                </textarea>
+              </td>
+              <td style="width: 10.00%" *ngIf="typeAcess == 2">
+                <input type="number" class="form-control" formControlName="superiorNote" >
+              </td>
+              <td style="width: 10.00%" *ngIf="typeAcess == 2">
+                <input type="number" class="form-control" formControlName="agreementNote">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <hr />
+        <button class="btn btn-primary" type="button" (click)="onSave()" data-toggle="modal"
+          data-target="#msgModal">
+          Salvar
+        </button>
+        <button class="btn btn-danger mx-1" (click)="onCancel()">Cancelar</button>
+        <button class="btn btn-success" type="submit" [disabled]="!evaluationForm.valid"
+          data-toggle="modal"
+          data-target="#msgModal">
+          Finalizar
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

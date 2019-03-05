@@ -9,6 +9,7 @@ import { UserGroup } from '../../users/user';
 import { EvaluationType } from '../../evaluations/evaluation-type/evaluation-type';
 import { EvaluationTypeService } from '../../evaluations/evaluation-type/evaluation-type.service';
 import { MessageSended } from 'src/app/message-service/message-sended';
+import { CycleConfiguration } from '../cycle-configuration';
 
 @Component({
   selector: 'app-cyles-configuration',
@@ -18,6 +19,7 @@ import { MessageSended } from 'src/app/message-service/message-sended';
 export class CylesConfigurationComponent implements OnInit, OnDestroy {
 
   cycle: Cycle = null;
+  configurations: Array<CycleConfiguration> = new Array<CycleConfiguration>();
   configurationForm: FormGroup;
 
   constructor(private cyclesService: CyclesService, 
@@ -31,41 +33,26 @@ export class CylesConfigurationComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.route.params
       .subscribe(
-        (params: Params) => {          
-          this.cycle = this.cyclesService.getCycleById(+params['id']);                    
+        (params: Params) => {                   
+          this.cycle = this.cyclesService.getCycleById(+params['id']);
         }
     );
-    
+    this.configurations = this.cycle.configurations.slice();
     this.initForm();
-
-    this.cyclesService.removeConfiguration.subscribe(
-      (index: number) => {
-        this.cycle.configurations.splice(index, 1);
-      }
-    )
-    this.cyclesService.updateConfiguration.subscribe(
-      (data: {index: number, id: number, type: number}) => {
-        if (data.type == 1) {
-          this.cycle.configurations[data.index].userGroup = this.usersService.getGroupById(data.id);
-        }
-        if (data.type == 2) {
-          this.cycle.configurations[data.index].evaluationType = this.evaluationTypeService.getEvaluationTypeById(data.id);
-        }        
-      }
-    )
   }
 
   ngOnDestroy() {
-    this.cyclesService.removeConfiguration.unsubscribe;
-    this.cyclesService.updateConfiguration.unsubscribe;
   }
 
   initForm() {
     this.configurationForm = this.formBuilder.group({});
+    if (this.cycle.status.id == 2) {
+      this.configurationForm.disable();
+    }
   }
 
   onAddConfiguration() {
-    this.cycle.configurations.push({userGroup: null, evaluationType: null});
+    this.configurations.push(new CycleConfiguration(this.cyclesService.getNextCycleConfigurationId(),null,null));
   }
 
   onCancel() {
@@ -76,6 +63,7 @@ export class CylesConfigurationComponent implements OnInit, OnDestroy {
   onSubmit() {
     if (this.cycle.status.id == 1) {
       this.messageService.showMessage(new MessageSended('Configurações salvas com sucesso.', 'Informação'));
+      this.cycle.configurations = this.configurations;
       this.cyclesService.updateCycle(this.cycle);
       this.router.navigate(['/registration/cycles']);
     }
@@ -85,5 +73,18 @@ export class CylesConfigurationComponent implements OnInit, OnDestroy {
       }
     }
     
+  }
+
+  onUpdateConfiguration(data: {id: number, index: number, type: number}) {
+    if (data.type == 1) {
+      this.configurations[data.index].userGroup = this.usersService.getGroupById(data.id);
+    }
+    if (data.type == 2) {
+      this.configurations[data.index].evaluationType = this.evaluationTypeService.getEvaluationTypeById(data.id);
+    }
+  }
+
+  onRemoveConfiguration(data: {index: number}) {
+    this.configurations.splice(data.index, 1);
   }
 }
