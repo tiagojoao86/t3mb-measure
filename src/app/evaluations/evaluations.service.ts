@@ -9,6 +9,7 @@ import { Evaluation } from './evaluation';
 export class EvaluationsService {
 
     evaluationId: number = 0;
+    idpId: number = 0;
     evaluations: Array<Evaluation> = new Array<Evaluation>();
 
     constructor(private usersService: UsersService,
@@ -69,5 +70,10 @@ export class EvaluationsService {
                this.evaluations[i] = evaluation;
            }
        }
+    }
+
+    getIdpNextId(): number {
+        this.idpId++;
+        return this.idpId;
     }
 }

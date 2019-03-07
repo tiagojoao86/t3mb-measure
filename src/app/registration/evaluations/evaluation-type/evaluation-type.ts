@@ -1,9 +1,11 @@
 import { Concept } from './concept';
+import { Idp } from './idp';
 
 export class EvaluationType {
     id: number;
     description: string;
     concepts: Array<Concept> = new Array<Concept>();
+    idps: Array<Idp> = new Array<Idp>();
 
 
     constructor(id: number, description: string) {

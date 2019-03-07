@@ -6,6 +6,8 @@ import { MessageSended } from 'src/app/message-service/message-sended';
 import { MessageService } from 'src/app/message-service/message.service';
 import { Evaluation } from '../evaluation';
 import { EvaluationsService } from '../evaluations.service';
+import { Idp } from 'src/app/registration/evaluations/evaluation-type/idp';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-complete-evaluation',
@@ -80,17 +82,31 @@ export class CompleteEvaluationComponent implements OnInit {
       }
     });
 
+    let idps: FormArray = this.formBuilder.array([]);
+    this.evaluation.evaluationType.idps.forEach(idp => {
+      idps.push(this.formBuilder.group({
+        id: [{value: idp.id, disabled: true}],
+        description: [idp.description],
+        deadLine: [formatDate(idp.deadLine, 'yyyy-MM-dd', 'pt-BR')],
+      }));
+    });
+
     this.evaluationForm = this.formBuilder.group({
       mesured: [{value: this.evaluation.mesured.name, disabled: true}],
       mesurer: [{value: this.evaluation.status == Evaluation.AUTO ? this.evaluation.mesured.name : 
         this.evaluation.mesurer.name, disabled: true}],
       description: [{value: this.evaluation.evaluationType.description, disabled: true}],
-      concepts: concepts
+      concepts: concepts,
+      idps: idps
     });
   }
 
   getConceptsControl() {
     return (<FormArray>this.evaluationForm.get('concepts')).controls;
+  }
+
+  getIdpsControl() {
+    return (<FormArray>this.evaluationForm.get('idps')).controls;
   }
 
   showHint(id: number) {
@@ -128,6 +144,15 @@ export class CompleteEvaluationComponent implements OnInit {
         }
       })
     });
+    let idpsList: Array<Idp> = new Array<Idp>();
+    this.getIdpsControl().forEach(idpForm => {
+      idpsList.push(new Idp(
+        idpForm.get('id').value,
+        idpForm.get('description').value,
+        idpForm.get('deadLine').value
+      ));
+    });
+    this.evaluation.evaluationType.idps = idpsList;
   }
 
   onCancel() {
@@ -139,5 +164,17 @@ export class CompleteEvaluationComponent implements OnInit {
       this.evaluation = null;
       this.router.navigate(['/evaluations/my-evaluations']);
     } 
+  }
+
+  onAddIdp() {
+    this.getIdpsControl().push(this.formBuilder.group({
+      id: [{value: this.evaluationsService.getIdpNextId(), disabled: true}],
+      description: [''],
+      deadLine: [''],
+    }));
+  }
+
+  onDeleteIdp(index: number) {
+    this.getIdpsControl().splice(index,1);
   }
 }
