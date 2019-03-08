@@ -14,6 +14,7 @@ import { CylesConfigurationComponent } from './registration/cycles/cyles-configu
 import { EvaluationsComponent } from './evaluations/evaluations.component';
 import { MyEvaluationsComponent } from './evaluations/my-evaluations/my-evaluations.component';
 import { CompleteEvaluationComponent } from './evaluations/complete-evaluation/complete-evaluation.component';
+import { MyEvaluatedComponent } from './evaluations/my-evaluated/my-evaluated.component';
 
 const routes: Routes = [
   { path: '', component: MainComponent, data: {breadcrumb: 'Home'}, canActivate: [AuthGuard],
@@ -31,6 +32,7 @@ const routes: Routes = [
         { path: 'evaluations', component: EvaluationsComponent, data: {breadcrumb: 'Avaliações'}, 
                               canActivate: [AuthGuard], children: [
           { path: 'my-evaluations', component: MyEvaluationsComponent, data: {breadcrumb: 'Minhas Avaliacões'}},
+          { path: 'my-evaluated', component: MyEvaluatedComponent, data: {breadcrumb: 'Meus Avaliados'}},
           { path: 'complete-evaluation/:id', component: CompleteEvaluationComponent, data: {breadcrumb: 'Completar Avaliação'}},
         ]}
       ]},

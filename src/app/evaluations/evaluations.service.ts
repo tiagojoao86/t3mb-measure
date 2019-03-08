@@ -25,7 +25,8 @@ export class EvaluationsService {
                    }
                })
             })
-        });           
+        });
+        console.log(this.evaluations);
     }
 
 
@@ -50,6 +51,32 @@ export class EvaluationsService {
                     result.push(evaluation);
                 }
         });
+        return result;
+    }
+
+    getMyEvaluated(user: User, search: string) {
+        let result: Array<Evaluation> = new Array<Evaluation>();
+        this.evaluations.forEach(evaluation => {
+            if (evaluation.mesurer.id == user.id &&
+                evaluation.cycle.name.toUpperCase().search(search) > -1) {
+                    result.push(evaluation);
+                }
+        });
+
+        return result;
+    }
+
+    getInProgressMyEvaluated(user: User, search: string) {
+        let result: Array<Evaluation> = new Array<Evaluation>();
+        this.evaluations.forEach(evaluation => {
+            if (evaluation.mesurer.id == user.id &&
+                evaluation.cycle.name.toUpperCase().search(search) > -1 &&
+                evaluation.cycle.status.id == 1 &&
+                evaluation.status != Evaluation.FINISH) {
+                    result.push(evaluation);
+                }
+        });
+
         return result;
     }
 

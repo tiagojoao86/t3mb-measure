@@ -6,8 +6,8 @@ import { Role } from '../auth/role';
 export class RolesService {
     private subFunctions: Array<SysFunction> = [
         new SysFunction('Usuarios', 100, '/registration/users',[]),
-        new SysFunction('Meus Avaliados', 101, '/evaluations/my-evaluated',[]),
-        new SysFunction('Minhas Avaliações', 102, '/evaluations/my-evaluations',[]),
+        new SysFunction('Avaliações', 101, '/evaluations/my-evaluated',[]),
+        new SysFunction('Avaliações', 102, '/evaluations/my-evaluations',[]),
         new SysFunction('Ciclos', 102, '/registration/cycles',[]),
         new SysFunction('Tipos de Avaliações', 103, '/registration/evaluations-type',[]),
         new SysFunction('Colaboradores', 104, '/evaluations/collaborators',[]),
@@ -16,7 +16,7 @@ export class RolesService {
     private sysFunctions: Array<SysFunction> = [
         new SysFunction('Cadastros', 1, '/registration', [this.subFunctions[0],this.subFunctions[3],this.subFunctions[4]]),
         new SysFunction('Meus Avaliados', 2, '/evaluations', [this.subFunctions[1],this.subFunctions[5]]),
-        new SysFunction('Avaliações', 3, '/evaluations', [this.subFunctions[2]])
+        new SysFunction('Minhas Avaliações', 3, '/evaluations', [this.subFunctions[2]])
     ];
 
     private roles: Array<Role> = [

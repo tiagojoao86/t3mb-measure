@@ -29,6 +29,7 @@ import { MyEvaluationsComponent } from './evaluations/my-evaluations/my-evaluati
 import { EvaluationsComponent } from './evaluations/evaluations.component';
 import { EvaluationsService } from './evaluations/evaluations.service';
 import { CompleteEvaluationComponent } from './evaluations/complete-evaluation/complete-evaluation.component';
+import { MyEvaluatedComponent } from './evaluations/my-evaluated/my-evaluated.component';
 
 
 registerLocaleData(localePt, 'pt-BR', localePtExtra);
@@ -50,7 +51,8 @@ registerLocaleData(localePt, 'pt-BR', localePtExtra);
     CycleConfigurationDropdownComponent,
     MyEvaluationsComponent,
     EvaluationsComponent,
-    CompleteEvaluationComponent
+    CompleteEvaluationComponent,
+    MyEvaluatedComponent
   ],
   imports: [
     BrowserModule,
