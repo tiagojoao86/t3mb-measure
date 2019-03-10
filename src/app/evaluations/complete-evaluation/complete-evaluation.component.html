@@ -9,12 +9,12 @@
     <div class="col-md-12 col-xs-12">
       <form [formGroup]="evaluationForm" (ngSubmit)="onSubmit()">
         <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-          <label for="mesured">Avaliado</label>
-          <input type="text" id="mesured" formControlName="mesured" class="form-control">
+          <label for="measured">Avaliado</label>
+          <input type="text" id="measured" formControlName="measured" class="form-control">
         </div>
         <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
-          <label for="mesurer">Avaliador</label>
-          <input type="text" id="mesurer" formControlName="mesurer" class="form-control">
+          <label for="measurer">Avaliador</label>
+          <input type="text" id="measurer" formControlName="measurer" class="form-control">
         </div>
         <div class="form-group col-sm-12 col-md-6 col-lg-6 col-xl-6">
           <label for="description">Descrição</label>
@@ -26,10 +26,10 @@
               <th scope="col">ID</th>
               <th scope="col">Descrição</th>
               <th scope="col">Info</th>
-              <th scope="col">Auto</th>
+              <th scope="col">Nota (Colaborador)</th>
               <th scope="col">Justificativa</th>
-              <th scope="col" *ngIf="typeAcess == 2">Superior</th>
-              <th scope="col" *ngIf="typeAcess == 2">Consenso</th>
+              <th scope="col" *ngIf="typeAcess == 2 && (evaluation.status.id > 1)">Nota (Superior)</th>
+              <th scope="col" *ngIf="typeAcess == 2 && (evaluation.status.id > 2)">Nota (Consenso)</th>
             </tr>
           </thead>
           <tbody formArrayName="concepts">
@@ -51,19 +51,19 @@
                 <textarea type="text" class="form-control" rows="5" formControlName="ownJustify">                  
                 </textarea>
               </td>
-              <td style="width: 10.00%" *ngIf="typeAcess == 2">
+              <td style="width: 10.00%" *ngIf="typeAcess == 2 && (evaluation.status.id > 1)">
                 <input type="number" class="form-control" formControlName="superiorNote" >
               </td>
-              <td style="width: 10.00%" *ngIf="typeAcess == 2">
+              <td style="width: 10.00%" *ngIf="typeAcess == 2 && (evaluation.status.id > 2)">
                 <input type="number" class="form-control" formControlName="agreementNote">
               </td>
             </tr>
           </tbody>
         </table>
         <hr />
-        <div class="row">
+        <div class="row my-3">
           <div class="col-md-12 col-xs-12">
-            <h3> PDI</h3>
+            <h3>PDI (Plano de Desenvolvimento Individual)</h3>
             <button class="btn btn-success" type="button" (click)="onAddIdp()">Adicionar PDI</button>
           </div>
         </div>
@@ -90,7 +90,8 @@
                     </td> 
                     <td style="width: 10.00%">
                       <div class="col-sm-4 col-md-4 col-lg-4 col-xl-4 p-0 ml-0 mr-1 my-0 float-left">
-                        <button class="btn btn-danger btn-sm btn-block" type="button" (click)="onDeleteIdp(i)">-</button>
+                        <button class="btn btn-danger btn-sm btn-block" type="button" (click)="onDeleteIdp(i)"
+                        [disabled]="evaluation.status.id == 4">-</button>
                       </div>                      
                     </td>                   
                   </tr>
@@ -98,16 +99,41 @@
               </table>
         </div>
         <hr />
+        <div class="row" *ngIf="evaluation.status.id == 3">
+          <div class="col-12">
+            <h3>Encerramento da Avaliação</h3>
+            <h3>Confirmação de Senha</h3>
+          </div>
+          <div class="col-6">
+            <h4>Avaliado: {{ evaluation.measured.name }}</h4>
+          </div>
+          <div class="col-6">
+            <h4>Avaliador: {{ evaluation.measurer.name }}</h4>
+          </div>
+          <div class="col-6">
+              <input type="password" id="measuredPassword" 
+              formControlName="measuredPassword" class="form-control"
+              placeholder="Senha do Avaliado">
+          </div>
+          <div class="col-6">
+              <input type="password" id="measurerPassword" 
+              formControlName="measurerPassword" class="form-control"
+              placeholder="Senha do Avaliador">
+          </div>
+        </div>       
+        <hr />
         <button class="btn btn-primary" type="button" (click)="onSave()" data-toggle="modal"
-          data-target="#msgModal">
+          data-target="#msgModal" [disabled]="evaluation.status.id == 4">
           Salvar
         </button>
         <button class="btn btn-danger mx-1" (click)="onCancel()">Cancelar</button>
-        <button class="btn btn-success" type="submit" [disabled]="!evaluationForm.valid"
+        <button class="btn btn-success" type="submit" [disabled]="!evaluationForm.valid || evaluation.status.id == 4"
           data-toggle="modal"
           data-target="#msgModal">
-          Finalizar
+          Finalizar Etapa
         </button>
+        <hr />
+        
       </form>
     </div>
   </div>

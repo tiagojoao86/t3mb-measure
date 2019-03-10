@@ -26,14 +26,13 @@ export class EvaluationsService {
                })
             })
         });
-        console.log(this.evaluations);
     }
 
 
     getMyEvaluations(user: User, search: string): Array<Evaluation> {
         let result: Array<Evaluation> = new Array<Evaluation>();
         this.evaluations.forEach(evaluation => {
-            if (evaluation.mesured.id == user.id && 
+            if (evaluation.measured.id == user.id && 
                 evaluation.cycle.name.toUpperCase().search(search) > -1) {
                     result.push(evaluation);
                 }
@@ -45,7 +44,7 @@ export class EvaluationsService {
     getInProgressMyEvaluations(user: User, search: string): Array<Evaluation> {
         let result: Array<Evaluation> = new Array<Evaluation>();
         this.evaluations.forEach(evaluation => {
-            if (evaluation.mesured.id == user.id && 
+            if (evaluation.measured.id == user.id && 
                 evaluation.cycle.name.toUpperCase().search(search) > -1 &&
                 evaluation.cycle.status.id == 1) {
                     result.push(evaluation);
@@ -57,10 +56,12 @@ export class EvaluationsService {
     getMyEvaluated(user: User, search: string) {
         let result: Array<Evaluation> = new Array<Evaluation>();
         this.evaluations.forEach(evaluation => {
-            if (evaluation.mesurer.id == user.id &&
-                evaluation.cycle.name.toUpperCase().search(search) > -1) {
-                    result.push(evaluation);
+            if (evaluation.measurer != null) {
+                if (evaluation.measurer.id == user.id &&
+                    evaluation.cycle.name.toUpperCase().search(search) > -1) {
+                        result.push(evaluation);
                 }
+            };
         });
 
         return result;
@@ -69,12 +70,14 @@ export class EvaluationsService {
     getInProgressMyEvaluated(user: User, search: string) {
         let result: Array<Evaluation> = new Array<Evaluation>();
         this.evaluations.forEach(evaluation => {
-            if (evaluation.mesurer.id == user.id &&
-                evaluation.cycle.name.toUpperCase().search(search) > -1 &&
-                evaluation.cycle.status.id == 1 &&
-                evaluation.status != Evaluation.FINISH) {
-                    result.push(evaluation);
+            if (evaluation.measurer != null) {
+                if (evaluation.measurer.id == user.id &&
+                    evaluation.cycle.name.toUpperCase().search(search) > -1 &&
+                    evaluation.cycle.status.id == 1 &&
+                    evaluation.status != Evaluation.FINISH) {
+                        result.push(evaluation);
                 }
+            }
         });
 
         return result;

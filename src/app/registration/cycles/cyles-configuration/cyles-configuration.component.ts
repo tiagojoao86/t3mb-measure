@@ -62,14 +62,14 @@ export class CylesConfigurationComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     if (this.cycle.status.id == 1) {
-      this.messageService.showMessage(new MessageSended('Configurações salvas com sucesso.', 'Informação'));
+      this.messageService.showMessage(new MessageSended(['Configurações salvas com sucesso.'], 'Informação'));
       this.cycle.configurations = this.configurations;
       this.cyclesService.updateCycle(this.cycle);
       this.router.navigate(['/registration/cycles']);
     }
     else {
       if (this.cycle.status.id == 2) {
-        this.messageService.showMessage(new MessageSended('Você não pode alterar um ciclo encerrado.', 'Informação')); 
+        this.messageService.showMessage(new MessageSended(['Você não pode alterar um ciclo encerrado.'], 'Informação')); 
       }
     }
     

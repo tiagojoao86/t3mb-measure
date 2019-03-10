@@ -53,11 +53,11 @@ export class CyclesEditComponent implements OnInit {
     );
     if (this.editMode) {
       this.cyclesService.updateCycle(cycle);
-      this.messageService.showMessage(new MessageSended('Ciclo alterado com sucesso', 'Informação'));
+      this.messageService.showMessage(new MessageSended(['Ciclo alterado com sucesso'], 'Informação'));
     }
     else {
       this.cyclesService.addCycle(cycle);
-      this.messageService.showMessage(new MessageSended('Ciclo cadastrado com sucesso', 'Informação'));
+      this.messageService.showMessage(new MessageSended(['Ciclo cadastrado com sucesso'], 'Informação'));
     }
     
     this.router.navigate(['/registration/cycles']);

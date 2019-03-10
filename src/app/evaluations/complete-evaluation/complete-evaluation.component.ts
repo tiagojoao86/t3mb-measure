@@ -40,11 +40,11 @@ export class CompleteEvaluationComponent implements OnInit {
           this.evaluation = this.evaluationsService.getEvaluationById(params['id']);
         }
     );
-    if (this.authService.getLoggedUser() == this.evaluation.mesured) {
+    if (this.authService.getLoggedUser() == this.evaluation.measured) {
       this.typeAcess = CompleteEvaluationComponent.OWN;
     }
     else {
-      if (this.authService.getLoggedUser() == this.evaluation.mesurer) {
+      if (this.authService.getLoggedUser() == this.evaluation.measurer) {
         this.typeAcess = CompleteEvaluationComponent.SUPERIOR;
       }
     }
@@ -70,7 +70,7 @@ export class CompleteEvaluationComponent implements OnInit {
         concept.get('ownNote').setValidators([Validators.min(1), Validators.max(4), Validators.required]);
         concept.get('ownJustify').setValidators([Validators.required]);
       }
-      if (this.evaluation.status == Evaluation.SUPERIOR) {
+      if (this.evaluation.status == Evaluation.SUPERIOR || this.typeAcess == CompleteEvaluationComponent.SUPERIOR) {
         concept.get('ownNote').disable();
         concept.get('ownJustify').disable();
         concept.get('superiorNote').setValidators([Validators.min(1), Validators.max(4), Validators.required]);
@@ -78,9 +78,16 @@ export class CompleteEvaluationComponent implements OnInit {
       if (this.evaluation.status == Evaluation.AGREEMENT) {
         concept.get('ownNote').disable();
         concept.get('superiorNote').disable();
+        concept.get('ownJustify').disable();
         concept.get('agreementNote').setValidators([Validators.min(1), Validators.max(4), Validators.required]);
       }
-    });
+      if (this.evaluation.status == Evaluation.FINISH) {
+        concept.get('ownNote').disable();
+        concept.get('superiorNote').disable();
+        concept.get('ownJustify').disable();
+        concept.get('agreementNote').disable();
+      }      
+    });    
 
     let idps: FormArray = this.formBuilder.array([]);
     this.evaluation.evaluationType.idps.forEach(idp => {
@@ -90,14 +97,26 @@ export class CompleteEvaluationComponent implements OnInit {
         deadLine: [formatDate(idp.deadLine, 'yyyy-MM-dd', 'pt-BR')],
       }));
     });
+    if (this.evaluation.status == Evaluation.FINISH) {
+      idps.controls.forEach(idp => {
+        
+          idp.get('id').disable();
+          idp.get('description').disable();
+          idp.get('deadLine').disable();
+        
+      })
+      this.evaluationForm.disable();
+    }
 
     this.evaluationForm = this.formBuilder.group({
-      mesured: [{value: this.evaluation.mesured.name, disabled: true}],
-      mesurer: [{value: this.evaluation.status == Evaluation.AUTO ? this.evaluation.mesured.name : 
-        this.evaluation.mesurer.name, disabled: true}],
+      measured: [{value: this.evaluation.measured.name, disabled: true}],
+      measurer: [{value: this.evaluation.status == Evaluation.AUTO ? this.evaluation.measured.name : 
+        this.evaluation.measurer.name, disabled: true}],
       description: [{value: this.evaluation.evaluationType.description, disabled: true}],
       concepts: concepts,
-      idps: idps
+      idps: idps,      
+      measuredPassword: [''],
+      measurerPassword: ['']
     });
   }
 
@@ -113,18 +132,48 @@ export class CompleteEvaluationComponent implements OnInit {
     this.messageService.showMessage(new MessageSended(this.getConceptsControl()[id].get('hint').value, 'Informação'));
   }
 
-  onSubmit() {    
-    this.saveNotes();
-    this.evaluation.nextStatus();
-    this.evaluationsService.updateEvaluation(this.evaluation);
-    this.messageService.showMessage(new MessageSended('Avaliação Salva com Sucesso', 'Informação'));
-    this.goExit();
+  onSubmit() {
+    if (this.evaluation.status != Evaluation.AGREEMENT) {
+      this.saveNotes();
+      this.evaluation.nextStatus();
+      this.evaluationsService.updateEvaluation(this.evaluation);
+      this.messageService.showMessage(new MessageSended(['Avaliação Salva com Sucesso'], 'Informação'));
+      this.goExit();
+    }
+    else {
+      if (this.evaluation.status == Evaluation.AGREEMENT) {
+        let message: string[] = [''];
+        let measurerPassword = this.evaluationForm.get('measurerPassword').value;
+        let measuredPassword = this.evaluationForm.get('measuredPassword').value;
+
+        if (this.evaluation.measured.password != measuredPassword) {
+          message.push('Senha do Avaliado Incorreta.');
+        }
+        if (this.evaluation.measurer.password != measurerPassword) {
+          message.push('Senha do Avaliador Incorreta.');
+        }
+        if (this.evaluation.measured.password == measuredPassword &&
+          this.evaluation.measurer.password == measurerPassword) {
+            message.push('Avaliação Encerrada com Sucesso');
+            this.saveNotes();
+            this.evaluation.nextStatus();
+            this.evaluationsService.updateEvaluation(this.evaluation);
+            this.messageService.showMessage(new MessageSended(message, 'Informação'));
+            this.goExit();
+        }
+        else {
+          this.messageService.showMessage(new MessageSended(message, 'Erro'));
+        }
+
+      }
+    }  
+    
   }
 
   onSave() {
     this.saveNotes();    
     this.evaluationsService.updateEvaluation(this.evaluation);
-    this.messageService.showMessage(new MessageSended('Avaliação Salva com Sucesso', 'Informação'));
+    this.messageService.showMessage(new MessageSended(['Avaliação Salva com Sucesso'], 'Informação'));
   }
 
   saveNotes() {
@@ -164,6 +213,10 @@ export class CompleteEvaluationComponent implements OnInit {
       this.evaluation = null;
       this.router.navigate(['/evaluations/my-evaluations']);
     } 
+    if (this.typeAcess == CompleteEvaluationComponent.SUPERIOR) {
+      this.evaluation = null;
+      this.router.navigate(['/evaluations/my-evaluated']);
+    }
   }
 
   onAddIdp() {

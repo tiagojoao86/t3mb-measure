@@ -81,11 +81,11 @@ export class UserEditComponent implements OnInit {
     user.hasSuperior = this.hasSuperior;
     if (this.editMode) {
       this.usersService.updateUser(user);
-      this.messageService.showMessage(new MessageSended('Usuario alterado com sucesso', 'Informação'));
+      this.messageService.showMessage(new MessageSended(['Usuario alterado com sucesso'], 'Informação'));
     }
     else {
       this.usersService.addUser(user);
-      this.messageService.showMessage(new MessageSended('Usuario cadastrado com sucesso', 'Informação'));
+      this.messageService.showMessage(new MessageSended(['Usuario cadastrado com sucesso'], 'Informação'));
     }
     
     this.router.navigate(['/registration/users']);

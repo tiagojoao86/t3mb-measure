@@ -6,8 +6,8 @@ export class Evaluation {
     id: string;
     evaluationType: EvaluationType;
     cycle: Cycle;
-    mesured: User;
-    mesurer: User;
+    measured: User;
+    measurer: User;
     status: {id: number, description: string};
 
     static AUTO = {id: 1, description: 'Auto-Avaliação'};
@@ -15,12 +15,12 @@ export class Evaluation {
     static AGREEMENT = {id: 3, description: 'Reunião de Consenso'};
     static FINISH = {id: 4, description: 'Finalizado'};
 
-    constructor(id: string, evaluationType: EvaluationType, cycle: Cycle, mesured: User, mesurer: User, status) {
+    constructor(id: string, evaluationType: EvaluationType, cycle: Cycle, measured: User, measurer: User, status) {
         this.id = id;
         this.evaluationType = evaluationType;
         this.cycle = cycle;
-        this.mesured = mesured;
-        this.mesurer = mesurer;
+        this.measured = measured;
+        this.measurer = measurer;
         this.status = status;
     }
 

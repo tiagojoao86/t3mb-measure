@@ -9,7 +9,7 @@ import { MessageService } from './message.service';
 })
 export class MessageComponent implements OnInit {
 
-  infoMessage: string = '';
+  infoMessage: string[] = [''];
   titleMessage: string = '';
 
   constructor(private messageService: MessageService) { }

@@ -66,16 +66,16 @@ export class EvaluationTypeEditComponent implements OnInit {
     if (VALID) {
       if (this.editMode) {
         this.evaluationTypeService.updateEvaluationType(newEvaluationType)
-        this.messageService.showMessage(new MessageSended('Tipo de Avaliação alterada com sucesso', 'Informação'));        
+        this.messageService.showMessage(new MessageSended(['Tipo de Avaliação alterada com sucesso'], 'Informação'));        
       }
       else {
         this.evaluationTypeService.addEvaluationType(newEvaluationType)
-        this.messageService.showMessage(new MessageSended('Tipo de Avaliação cadastrada com sucesso', 'Informação'));
+        this.messageService.showMessage(new MessageSended(['Tipo de Avaliação cadastrada com sucesso'], 'Informação'));
       }
       this.router.navigate(['/registration/evaluations-type']);
     }
     else {
-      this.messageService.showMessage(new MessageSended('Favor verificar se todos os campos estão preenchidos', 'Erro'));
+      this.messageService.showMessage(new MessageSended(['Favor verificar se todos os campos estão preenchidos'], 'Erro'));
     }
     
     

@@ -44,7 +44,6 @@ export class MyEvaluatedComponent implements OnInit {
       this.evaluations = this.evaluationService.getInProgressMyEvaluated(this.authService.getLoggedUser(),
         this.searchForm.get('description').value);
     }
-    console.log(this.evaluations);
   }
 
   onFill(evaluationId: string) {

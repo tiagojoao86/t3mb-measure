@@ -2,9 +2,9 @@ import { Role } from '../../auth/role';
 
 export class User {
     id: number;
-    name: String;
-    login: String;
-    password: String;
+    name: string;
+    login: string;
+    password: string;
     roles: Role[];
     userGroup: UserGroup;
     superior: User;
