@@ -4,6 +4,7 @@ import localePt from '@angular/common/locales/pt';
 import { LOCALE_ID, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthGuard } from './auth/auth-guard.service';
@@ -30,6 +31,10 @@ import { EvaluationsComponent } from './evaluations/evaluations.component';
 import { EvaluationsService } from './evaluations/evaluations.service';
 import { CompleteEvaluationComponent } from './evaluations/complete-evaluation/complete-evaluation.component';
 import { MyEvaluatedComponent } from './evaluations/my-evaluated/my-evaluated.component';
+import { PanelModule } from 'primeng/panel'
+import { InputTextModule } from 'primeng/inputtext'
+import {PasswordModule} from 'primeng/password';
+import {ButtonModule} from 'primeng/button';
 
 
 registerLocaleData(localePt, 'pt-BR', localePtExtra);
@@ -56,9 +61,11 @@ registerLocaleData(localePt, 'pt-BR', localePtExtra);
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    PanelModule, InputTextModule, PasswordModule, ButtonModule
   ],
   providers: [AuthService, 
     AuthGuard, 

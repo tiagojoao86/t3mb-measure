@@ -1,4 +1,27 @@
-<div class="container border my-5 py-5 col-xs-6 col-sm-5 col-md-4">
+<div class="ui-g">
+  <div class="ui-g-4 ui-g-offset-4">
+    <p-panel header="Acesso ao Sistema">
+      <h3 class="first">T3MB - Measure</h3>
+      <form (ngSubmit)="onLogin(f)" #f="ngForm">
+        <div class="ui-g">
+          <h4>Login</h4>
+          <div class="ui-g-12">            
+            <input id="login" name="login" ngModel type="text" pInputText>
+          </div>
+          <h4>Senha</h4>
+          <div class="ui-g-12"> 
+            <input id="password" name="password" ngModel type="password" pPassword [feedback]=false>
+          </div>
+          <div class="ui-g-12">
+            <button pButton class="ui-button-raised ui-button-success" type="submit" label="Entrar"></button>
+          </div>      
+        </div>        
+      </form>
+      <div class="row">{{ error }}</div>
+    </p-panel>
+  </div>
+</div>
+<!--<div class="container border my-5 py-5 col-xs-6 col-sm-5 col-md-4">
   <div class="row">
       <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
         <h4>T3MB - Measure</h4>
@@ -20,6 +43,6 @@
     </div>
   </div>
   <div class="row">{{ error }}</div>
-</div>
+</div> -->
 
 
