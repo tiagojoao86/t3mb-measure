@@ -5,6 +5,7 @@ import { AuthService } from '../auth/auth.service';
 import { BreadCrumb } from '../auth/breadcrumb';
 import { SysFunction } from '../auth/sysfunction';
 import { UsersService } from '../registration/users/users.service';
+import { MenuItem } from 'primeng/components/common/menuitem';
 
 @Component({
   selector: 'app-main',
@@ -13,7 +14,8 @@ import { UsersService } from '../registration/users/users.service';
 })
 export class MainComponent implements OnInit {
 
-  mainMenu: Array<SysFunction>;
+  //mainMenu: Array<SysFunction>;
+  menuItems: MenuItem[] = [];
   
   urls: Array<BreadCrumb> = new Array<BreadCrumb>();
   nextUrl: string = '';
@@ -25,12 +27,31 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit() {   
-    this.mainMenu = new Array<SysFunction>();
-    this.authService.getLoggedUser().roles.forEach(role => {
+    //this.mainMenu = new Array<SysFunction>();
+    this.authService.getLoggedUser().roles.forEach(role => {      
       role.sysFunctions.forEach(sysFunction => {
-        this.mainMenu.push(sysFunction);
-      })
-    });    
+        
+        let subMenuItems: MenuItem[] = [];
+        let label: string = sysFunction.name;
+
+        sysFunction.subFunctions.forEach(subFunction => {
+          subMenuItems.push(
+            { label: subFunction.name });                
+        });
+        console.log(subMenuItems);
+        console.log(label);
+
+        this.menuItems.push({
+          label: label,
+          items: [subMenuItems]
+        });
+        
+        //this.mainMenu.push(sysFunction);
+      });      
+    });
+
+    console.log(this.menuItems);   
+    
     
     this.router.events.pipe(
           filter(event => event instanceof NavigationEnd)

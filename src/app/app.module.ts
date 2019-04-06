@@ -35,6 +35,7 @@ import { PanelModule } from 'primeng/panel'
 import { InputTextModule } from 'primeng/inputtext'
 import {PasswordModule} from 'primeng/password';
 import {ButtonModule} from 'primeng/button';
+import {MegaMenuModule} from 'primeng/megamenu';
 
 
 registerLocaleData(localePt, 'pt-BR', localePtExtra);
@@ -65,7 +66,7 @@ registerLocaleData(localePt, 'pt-BR', localePtExtra);
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    PanelModule, InputTextModule, PasswordModule, ButtonModule
+    PanelModule, InputTextModule, PasswordModule, ButtonModule, MegaMenuModule
   ],
   providers: [AuthService, 
     AuthGuard, 
