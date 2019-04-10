@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { User, UserGroup } from './user';
 import { RolesService } from '../../roles/roles.service';
 import { HttpClient } from '@angular/common/http'
+import { Response } from '../../response';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 @Injectable()
 export class UsersService {
     
@@ -140,22 +143,21 @@ export class UsersService {
     getUsersGroup(): Array<UserGroup> {
         return this.userGroups;
     }
-
-    getToken(login: string, password: string): String {
-        let jwtToken;
-        
-        this.httpClient.post<{data: string, errors: []}>('http://localhost:8080/auth', {login: login, password: password})
-                            .subscribe(response => {
-                                console.log(response.data['token']);
-                            });
-        //console.log(jwtToken);
-        return "";
+/*
+    getToken(login: string, password: string): Observable<Response> {        
+        this.httpClient.post<Response>('http://localhost:8080/auth', {login: login, password: password});
+        let token;
+        this.httpClient.post<Response>('http://localhost:8080/auth', {login: login, password: password})
+            .pipe(map((response) => {
+                console.log("Teste");
+                console.log(response);
+            }));
+        this.httpClient.post<Response>('http://localhost:8080/auth', {login: login, password: password})
+            .subscribe((response) => {
+                console.log("Teste");
+                console.log(response);
+            });
+        return null;        
     }
-
-
-
-    
-
-    
-
+*/
 }

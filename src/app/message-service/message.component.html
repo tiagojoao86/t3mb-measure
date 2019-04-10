@@ -1,4 +1,15 @@
+<p-dialog [(visible)]="display" [modal]="true" header='{{titleMessage}}' [style]="{width: '350px', minWidth: '200px'}">
+        <div>            
+            <div *ngFor="let message of infoMessage; let i = index">
+                {{ message }}
+            </div>
+        </div>
+        <p-footer>
+            <button type="button" pButton (click)="display=false" label="OK"></button>
+        </p-footer>
+</p-dialog>
 
+<!--
 <div class="modal fade" id="msgModal" tabindex="-1" role="dialog" aria-labelledby="msgModal" aria-hidden="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -19,4 +30,5 @@
         </div>
     </div>
 </div>
+-->
 

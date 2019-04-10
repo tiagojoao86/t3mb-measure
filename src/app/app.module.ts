@@ -36,7 +36,10 @@ import { InputTextModule } from 'primeng/inputtext'
 import {PasswordModule} from 'primeng/password';
 import {ButtonModule} from 'primeng/button';
 import {MegaMenuModule} from 'primeng/megamenu';
+import {DialogModule} from 'primeng/dialog';
 import {HttpClientModule} from '@angular/common/http';
+import {BreadcrumbModule} from 'primeng/breadcrumb';
+import {ToastModule} from 'primeng/toast';
 
 
 registerLocaleData(localePt, 'pt-BR', localePtExtra);
@@ -64,11 +67,13 @@ registerLocaleData(localePt, 'pt-BR', localePtExtra);
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    HttpClientModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    PanelModule, InputTextModule, PasswordModule, ButtonModule, MegaMenuModule
+    PanelModule, InputTextModule, PasswordModule, ButtonModule, 
+    MegaMenuModule, DialogModule, BreadcrumbModule, ToastModule
   ],
   providers: [AuthService, 
     AuthGuard, 

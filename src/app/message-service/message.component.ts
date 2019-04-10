@@ -11,6 +11,7 @@ export class MessageComponent implements OnInit {
 
   infoMessage: string[] = [''];
   titleMessage: string = '';
+  display: boolean = false;
 
   constructor(private messageService: MessageService) { }
 
@@ -25,6 +26,7 @@ export class MessageComponent implements OnInit {
   showMessage(message: MessageSended) {
     this.infoMessage = message.message;
     this.titleMessage = message.type;
+    this.display = true;
   }
 
 }
