@@ -9,6 +9,8 @@ export class AuthService {
 
     loggedUser: User = null;
 
+    jwtToken: String = '';
+
     constructor(private router: Router, private usersService: UsersService) {}
 
     isAuthenticated(){
@@ -24,6 +26,7 @@ export class AuthService {
     }
 
     loginUser(login: string, password: string) {
+        this.jwtToken = this.usersService.getToken(login,password);
         this.loggedUser = this.usersService.validateUser(login,password);
         if (this.loggedUser != null) {
             return true;

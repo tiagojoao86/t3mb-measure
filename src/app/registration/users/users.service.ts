@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { User, UserGroup } from './user';
 import { RolesService } from '../../roles/roles.service';
+import { HttpClient } from '@angular/common/http'
 @Injectable()
 export class UsersService {
+    
 
     private users: Array<User> = new Array<User>();
     private userGroups: Array<UserGroup> = new Array<UserGroup>();
 
-    constructor(rolesService: RolesService) {
+    constructor(rolesService: RolesService, private httpClient: HttpClient) {
         this.userGroups = new Array<UserGroup>(
             new UserGroup(1, 'Administradores'),
             new UserGroup(2, 'Coordenação'),
@@ -137,6 +139,17 @@ export class UsersService {
 
     getUsersGroup(): Array<UserGroup> {
         return this.userGroups;
+    }
+
+    getToken(login: string, password: string): String {
+        let jwtToken;
+        
+        this.httpClient.post<{data: string, errors: []}>('http://localhost:8080/auth', {login: login, password: password})
+                            .subscribe(response => {
+                                console.log(response.data['token']);
+                            });
+        //console.log(jwtToken);
+        return "";
     }
 
 
