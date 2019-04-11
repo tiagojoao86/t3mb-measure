@@ -14,10 +14,9 @@ import { MessageSended } from '../message-service/message-sended';
 export class AuthService {
 
     loggedUser: User = null;
+    jwtToken: string = '';
 
-    jwtToken: String = '';
-
-    constructor(private router: Router, private usersService: UsersService, private httpClient: HttpClient,
+    constructor(private router: Router, private httpClient: HttpClient,
                     private messageService: MessageService) {}
 
     isAuthenticated(){
@@ -32,20 +31,13 @@ export class AuthService {
         return this.loggedUser;
     }
 
-    loginUser(login: string, password: string) {
-        this.httpClient.post<Response>('http://localhost:8080/auth', {login: login, password: password})        
-            .toPromise()
-                .then(response => {                        
-                        this.loggedUser = this.usersService.getUserLogin(login);
-                        this.jwtToken = response.data.token;
-                        this.router.navigate(['/']);                        
-                    })
-                .catch(
-                    error => {
-                       this.messageService.showMessage(new MessageSended(['Por favor verifique o usuário e a senha'], 'Erro de Autenticação'));
-                    }
-            );        
+    setToken(token: string) {
+        this.jwtToken = token
     }
+
+    getToken(): string {
+        return this.jwtToken;
+    }   
    
     verifyFunction(url: string): boolean {
         var result = false;

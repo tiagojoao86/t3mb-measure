@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { User, UserGroup } from './user';
 import { RolesService } from '../../roles/roles.service';
-import { HttpClient } from '@angular/common/http'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Response } from '../../response';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { AuthService } from '../../auth/auth.service';
+import { Router } from '@angular/router';
 @Injectable()
 export class UsersService {
     
@@ -12,8 +14,9 @@ export class UsersService {
     private users: Array<User> = new Array<User>();
     private userGroups: Array<UserGroup> = new Array<UserGroup>();
 
-    constructor(rolesService: RolesService, private httpClient: HttpClient) {
-        this.userGroups = new Array<UserGroup>(
+    constructor(rolesService: RolesService, private httpClient: HttpClient, private authService: AuthService,
+        private router: Router) {        
+        /*this.userGroups = new Array<UserGroup>(
             new UserGroup(1, 'Administradores'),
             new UserGroup(2, 'Coordenação'),
             new UserGroup(3, 'Recepção')
@@ -37,32 +40,27 @@ export class UsersService {
         this.getUserById(2).hasSuperior = false;
 
         this.getUserById(4).superior = null;
-        this.getUserById(4).hasSuperior = false;
+        this.getUserById(4).hasSuperior = false;*/
         
     }  
 
     getUsers(): Array<User> {
+        //this.httpClient.post<Response>('http://localhost:8080/auth', {login: login, password: password});
         return this.users;
     }
 
-    getUserLogin(login: string): User {
-        var user: User = null;        
-        this.users.forEach(element => {
-            if (element.login === login){
-                user = element;
-            }
+    getUserByLogin(login: string): Observable<Response> {
+        return this.httpClient.get<Response>('http://localhost:8080/api/users/login/'+login, 
+        {
+            headers: this.getHeaders()
         });
-        return user;
     }
 
-    getUserById(id: number): User {
-        var user: User = null;        
-        this.users.forEach(element => {
-            if (element.id == id){
-                user = element;
-            }
+    getUserById(id: number): Observable<Response> {
+        return this.httpClient.get<Response>('http://localhost:8080/api/users/'+id, 
+        {
+            headers: this.getHeaders()
         });
-        return user;
     }
 
     validateUser(login: string, password: string): User {
@@ -108,14 +106,11 @@ export class UsersService {
         return result;
     }
 
-    getActiveUsersByName(name: string): Array<User> {
-        let result: Array<User> = new Array<User>();
-        this.users.forEach(element => {
-            if (element.name.toUpperCase().search(name.toUpperCase()) > -1 && element.status == 'A') {
-                result.push(element);
-            }
+    getActiveUsersByName(name: string): Observable<Response> {        
+        return this.httpClient.get<Response>('http://localhost:8080/api/users/active', 
+        {
+            headers: this.getHeaders()
         });
-        return result;
     }
 
     getNextId(): number {
@@ -143,6 +138,15 @@ export class UsersService {
     getUsersGroup(): Array<UserGroup> {
         return this.userGroups;
     }
+
+    getHeaders(): HttpHeaders {
+        return new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Authorization': 'Bearer '+this.authService.getToken()
+        });
+    }
 /*
     getToken(login: string, password: string): Observable<Response> {        
         this.httpClient.post<Response>('http://localhost:8080/auth', {login: login, password: password});
@@ -160,4 +164,5 @@ export class UsersService {
         return null;        
     }
 */
+    
 }

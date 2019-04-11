@@ -40,6 +40,8 @@ import {DialogModule} from 'primeng/dialog';
 import {HttpClientModule} from '@angular/common/http';
 import {BreadcrumbModule} from 'primeng/breadcrumb';
 import {ToastModule} from 'primeng/toast';
+import {CheckboxModule} from 'primeng/checkbox';
+import {TableModule} from 'primeng/table';
 
 
 registerLocaleData(localePt, 'pt-BR', localePtExtra);
@@ -73,7 +75,8 @@ registerLocaleData(localePt, 'pt-BR', localePtExtra);
     FormsModule,
     ReactiveFormsModule,
     PanelModule, InputTextModule, PasswordModule, ButtonModule, 
-    MegaMenuModule, DialogModule, BreadcrumbModule, ToastModule
+    MegaMenuModule, DialogModule, BreadcrumbModule, ToastModule,
+    CheckboxModule, TableModule
   ],
   providers: [AuthService, 
     AuthGuard, 
