@@ -38,30 +38,25 @@ export class UserEditComponent implements OnInit {
       .subscribe(
         (params: Params) => {
           if (params['id'] !== 'new') {
-            this.usersService.getUserById(+params['id']).toPromise()
-            .then((response: Response) => {
-              this.user = new User(
-                response.data.id,
-                response.data.name,
-                response.data.login,
-                response.data.password,
-                response.data.roles,
-                response.data.userGroup,
-                response.data.status
-              );
+            this.usersService.getUserById(+params['id'])
+            .subscribe(response => {
+              this.user = this.refactoryUser(response.data);
               this.editMode = true;
-              this.usersService.getSuperiors().toPromise()
-              .then((response: Response) => {
-                this.superiorsList = response.data;
-                this.initForm();
-              })
-              .catch(error => {
+              this.usersService.getSuperiors()
+              .subscribe(response => {
+                response.data.forEach(element => {
+                  this.superiorsList.push(this.refactoryUser(element));
+                });                
+                this.initForm();              
+              },error => {
                 this.messageService.showMessage(new MessageSended(['Erro ao lista de Superiores'],'Erro'));
+                console.log(error);
               });
-            })
-            .catch(error => {
+            },error => {
               this.messageService.showMessage(new MessageSended(['Erro ao carregar Usuário'],'Erro'));
-            });            
+              console.log(error);
+            }
+          );            
           }
           else {
             this.editMode = false;
@@ -117,20 +112,20 @@ export class UserEditComponent implements OnInit {
   initForm() {
     if (this.editMode) {
       this.selectedGroup = this.user.userGroup;
-      this.selectedSuperior = this.user.superior;
-      this.userForm = new FormGroup({
-        'id': new FormControl({value: this.user.id, disabled: true }, Validators.required),
-        'login': new FormControl(this.user.login, Validators.required),
-        'name': new FormControl(this.user.name, Validators.required),
-        'password': new FormControl(this.user.password, Validators.required),
-        '1': new FormControl(this.user.isRolePresent(1)),
-        '2': new FormControl(this.user.isRolePresent(2)),
-        '3': new FormControl(this.user.isRolePresent(3)),
-        'A': new FormControl(this.user.isActive()),
-        'userGroup': new FormControl(this.selectedGroup, Validators.required),
-        'superior': new FormControl(this.selectedSuperior),
-        'hasSuperior': new FormControl(this.user.hasSuperior)
-      });
+      this.selectedSuperior = this.user.superior;      
+      this.userForm.setValue({
+        id: this.user.id,
+        login: this.user.login,
+        name: this.user.name,
+        password: this.user.password,
+        1: this.user.isRolePresent(1),
+        2: this.user.isRolePresent(2),
+        3: this.user.isRolePresent(3),
+        A: this.user.isActive(),
+        userGroup: this.selectedGroup,
+        superior: this.selectedSuperior,
+        hasSuperior: this.user.hasSuperior
+      });      
     }
     else {
       this.userForm = new FormGroup({
@@ -204,6 +199,23 @@ export class UserEditComponent implements OnInit {
       this.userForm.get('superior').setValue(null);
       this.selectedSuperior = null;
     }
+  }
+
+  refactoryUser(data): User {
+    let user: User = new User(
+      data.id,
+      data.name,
+      data.login,
+      data.password,
+      data.roles,
+      data.userGroup,
+      data.status
+    );
+    user.hasSuperior = data.hasSuperior;
+    if (user.hasSuperior) {
+      user.superior = this.refactoryUser(data.superior);
+    }
+    return user;
   }
 
 }

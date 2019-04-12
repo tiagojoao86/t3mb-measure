@@ -30,7 +30,7 @@
               </label>
           </div>
           <div class="form-group">
-              <label for="userGroup">Status</label>
+              <label for="userGroup">Group</label>
               <select id="userGroup" formControlName="userGroup" class="form-control" 
                 (change)="onChangeGroup($event.target.selectedOptions[0].id)">
                 <option *ngFor='let userGroup of usersService.userGroups' [value]='userGroup' [id]='userGroup.id'>
