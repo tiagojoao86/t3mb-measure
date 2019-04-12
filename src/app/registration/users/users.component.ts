@@ -4,6 +4,8 @@ import { NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { User } from './user';
 import { Response } from '../../response'
+import { MessageService } from 'src/app/message-service/message.service';
+import { MessageSended } from 'src/app/message-service/message-sended';
 
 
 @Component({
@@ -18,7 +20,7 @@ export class UsersComponent implements OnInit {
   checked: boolean = true;
 
   constructor(private usersService: UsersService, private router: Router,
-                private route: ActivatedRoute) { }
+                private route: ActivatedRoute, private messageService: MessageService) { }
 
   ngOnInit() {
     
@@ -26,22 +28,18 @@ export class UsersComponent implements OnInit {
 
   onSearch(f: NgForm) {
     if (f.value.active == true) {
-      console.log("Entrou no if");
       this.usersService.getActiveUsersByName(f.value.search).toPromise()
         .then((response: Response) => {
-          console.log(response);
           this.userList = response.data;
-          console.log(this.userList);
           return this.userList;
         })
-        .catch();
-      //getActiveUsersByName(f.value.search)
+        .catch(error => {
+          this.messageService.showMessage(new MessageSended(['Não foi possível carregar a lista de usuários'],'Erro'))
+        });
     }
     else if (f.value.active == false || f.value.active == '') {
       this.userList = this.usersService.getUsersByName(f.value.search);
     } 
-    
-    console.log(this.userList);
   }
 
   onEdit(id: number) {

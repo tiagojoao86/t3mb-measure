@@ -1,14 +1,13 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { Role } from 'src/app/auth/role';
 import { User, UserGroup } from 'src/app/registration/users/user';
 import { MessageSended } from 'src/app/message-service/message-sended';
 import { RolesService } from 'src/app/roles/roles.service';
 import { UsersService } from '../users.service';
 import { MessageService } from 'src/app/message-service/message.service';
-import { DISABLED } from '@angular/forms/src/model';
+import { Response } from 'src/app/response';
 
 @Component({
   selector: 'app-user-edit',
@@ -18,7 +17,7 @@ import { DISABLED } from '@angular/forms/src/model';
 export class UserEditComponent implements OnInit {
 
   user: User = null;
-  userForm : FormGroup;
+  userForm : FormGroup = new FormGroup({});
   editMode: boolean = false;
   selectedGroup: UserGroup;
   selectedSuperior: User;
@@ -34,22 +33,41 @@ export class UserEditComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit() {
+    this.createForm();
     this.route.params
       .subscribe(
         (params: Params) => {
           if (params['id'] !== 'new') {
-            this.user = this.usersService.getUserById(+params['id']);
-            this.editMode = true;
+            this.usersService.getUserById(+params['id']).toPromise()
+            .then((response: Response) => {
+              this.user = new User(
+                response.data.id,
+                response.data.name,
+                response.data.login,
+                response.data.password,
+                response.data.roles,
+                response.data.userGroup,
+                response.data.status
+              );
+              this.editMode = true;
+              this.usersService.getSuperiors().toPromise()
+              .then((response: Response) => {
+                this.superiorsList = response.data;
+                this.initForm();
+              })
+              .catch(error => {
+                this.messageService.showMessage(new MessageSended(['Erro ao lista de Superiores'],'Erro'));
+              });
+            })
+            .catch(error => {
+              this.messageService.showMessage(new MessageSended(['Erro ao carregar Usuário'],'Erro'));
+            });            
           }
           else {
             this.editMode = false;
           }          
         }
     );
-    this.superiorsList = this.usersService.getSuperiors();
-    this.initForm();
-
-
   }
 
   onSubmit (){
@@ -134,12 +152,32 @@ export class UserEditComponent implements OnInit {
     
   }
 
+  createForm() {
+    this.userForm = new FormGroup({
+      'id': new FormControl({value: '0', disabled: true}, Validators.required),
+      'login': new FormControl('', Validators.required),
+      'name': new FormControl('', Validators.required),
+      'password': new FormControl('', Validators.required),
+      '1': new FormControl(false),
+      '2': new FormControl(false),
+      '3': new FormControl({value: true}),
+      'A': new FormControl({value: true}),
+      'userGroup': new FormControl(this.selectedGroup, Validators.required),
+      'superior': new FormControl(null),
+      'hasSuperior': new FormControl(true)
+    });
+  }
+
   onChangeGroup(id: number) {
     this.selectedGroup = this.usersService.getGroupById(id);
   }
 
   onChangeSuperior(id: number) {
-    this.selectedSuperior = this.usersService.getUserById(id);
+    this.superiorsList.forEach(superior => {
+      if (superior.id == id) {
+        this.selectedSuperior = superior;
+      }
+    });
   }
 
   onChangeHasSuperior() {

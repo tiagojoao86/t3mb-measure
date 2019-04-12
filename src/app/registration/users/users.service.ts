@@ -95,15 +95,11 @@ export class UsersService {
         return result;
     }
 
-    getSuperiors(): Array<User> {
-        let result: Array<User> = new Array<User>();
-        this.users.forEach(element => {
-            if (element.isRolePresent(2)) {
-                result.push(element);
-            }
+    getSuperiors(): Observable<Response> {
+        return this.httpClient.get<Response>('http://localhost:8080/api/users/superiors', 
+        {
+            headers: this.getHeaders()
         });
-
-        return result;
     }
 
     getActiveUsersByName(name: string): Observable<Response> {        

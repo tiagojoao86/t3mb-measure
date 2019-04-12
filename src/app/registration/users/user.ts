@@ -22,6 +22,8 @@ export class User {
         this.status = status;
     }
 
+    
+
     isRolePresent(id: number): boolean {
         var result = false;
         this.roles.forEach(role => {
