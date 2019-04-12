@@ -23,8 +23,7 @@ export class UserEditComponent implements OnInit {
   selectedSuperior: User;
   hasSuperior: boolean;
   superiorsList: Array<User> = new Array<User>();
-
-  
+  userGroupsList: Array<UserGroup> = new Array<UserGroup>();
 
   constructor(private usersService: UsersService, 
     private rolesService: RolesService, 
@@ -40,14 +39,26 @@ export class UserEditComponent implements OnInit {
           if (params['id'] !== 'new') {
             this.usersService.getUserById(+params['id'])
             .subscribe(response => {
+              
               this.user = this.refactoryUser(response.data);
               this.editMode = true;
               this.usersService.getSuperiors()
+
               .subscribe(response => {
+
                 response.data.forEach(element => {
-                  this.superiorsList.push(this.refactoryUser(element));
+                  this.superiorsList.push(this.refactoryUser(element));                
                 });                
+                
+                this.usersService.getUserGroups()
+                .subscribe(response => {
+                  response.data.forEach(element => {
+                    this.userGroupsList.push(this.refactoryUserGroup(element))
+                  });
+                });
+
                 this.initForm();              
+
               },error => {
                 this.messageService.showMessage(new MessageSended(['Erro ao lista de Superiores'],'Erro'));
                 console.log(error);
@@ -202,20 +213,31 @@ export class UserEditComponent implements OnInit {
   }
 
   refactoryUser(data): User {
+    console.log(data);
     let user: User = new User(
       data.id,
       data.name,
       data.login,
       data.password,
       data.roles,
-      data.userGroup,
+      data.userGroup != null ? this.refactoryUserGroup(data.userGroup): null,
       data.status
     );
     user.hasSuperior = data.hasSuperior;
     if (user.hasSuperior) {
       user.superior = this.refactoryUser(data.superior);
     }
+    console.log(user);
     return user;
+  }
+
+  refactoryUserGroup(data): UserGroup {
+    let userGroup: UserGroup = new UserGroup(
+      data.id,
+      data.name
+    );
+
+    return userGroup;
   }
 
 }

@@ -30,7 +30,7 @@ export class CycleConfigurationDropdownComponent implements OnInit {
     private formBuilder: FormBuilder) { }
 
   ngOnInit() {
-    this.userGroups = this.usersService.getUsersGroup();
+    //this.userGroups = this.usersService.getUsersGroup(); - CORRIGIR
     this.evaluationTypes = this.evaluationTypeService.getEvaluationTypes();
     this.initForm();
   }

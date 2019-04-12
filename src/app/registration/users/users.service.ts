@@ -131,8 +131,11 @@ export class UsersService {
         return result;
     }
 
-    getUsersGroup(): Array<UserGroup> {
-        return this.userGroups;
+    getUserGroups(): Observable<Response> {        
+        return this.httpClient.get<Response>('http://localhost:8080/api/user-groups', 
+        {
+            headers: this.getHeaders()
+        });
     }
 
     getHeaders(): HttpHeaders {
