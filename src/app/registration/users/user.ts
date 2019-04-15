@@ -1,6 +1,6 @@
 import { Role } from '../../auth/role';
 
-export class User {
+export class User{
     id: number;
     name: string;
     login: string;
@@ -46,6 +46,20 @@ export class User {
 
     toString() : string {
         return '('+this.id+') '+this.name;
+    }
+
+    equals(obj: any): boolean {
+        if (obj instanceof User) {
+            if (obj.id === this.id) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
     }
     
 }

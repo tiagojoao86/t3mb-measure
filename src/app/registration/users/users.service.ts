@@ -10,9 +10,9 @@ import { Router } from '@angular/router';
 @Injectable()
 export class UsersService {
     
-
     private users: Array<User> = new Array<User>();
     private userGroups: Array<UserGroup> = new Array<UserGroup>();
+    private editUser: User;
 
     constructor(rolesService: RolesService, private httpClient: HttpClient, private authService: AuthService,
         private router: Router) {        
@@ -73,16 +73,18 @@ export class UsersService {
         return user;
     }
 
-    addUser(user: User) {
-        this.users.push(user);
+    addUser(user: User): Observable<Response> {
+        return this.httpClient.post<Response>('http://localhost:8080/api/users/', user,
+        {
+            headers: this.getHeaders()
+        });
     }
 
-    updateUser(user: User) {
-        for (let i = 0; i < this.users.length; i++){
-            if (this.users[i].id == user.id) {
-                this.users[i] = user;
-            }
-        }
+    updateUser(user: User): Observable<Response> {
+        return this.httpClient.put<Response>('http://localhost:8080/api/users/', user,
+        {
+            headers: this.getHeaders()
+        });
     }
 
     getUsersByName(name: string): Array<User> {
@@ -109,15 +111,11 @@ export class UsersService {
         });
     }
 
-    getNextId(): number {
-        let result = 0;
-        this.users.forEach(element => {
-            if (element.id > result) {
-                result = element.id+1;
-            }
+    getNextId(): Observable<Response> {        
+        return this.httpClient.get<Response>('http://localhost:8080/api/users/nextid', 
+        {
+            headers: this.getHeaders()
         });
-        
-        return result;
     }
 
     getGroupById(id: number): UserGroup {
@@ -145,6 +143,14 @@ export class UsersService {
             'Access-Control-Allow-Origin': '*',
             'Authorization': 'Bearer '+this.authService.getToken()
         });
+    }
+
+    setEditUser(user: User) {
+        this.editUser = user;
+    }
+
+    getEditUser(): User {
+        return this.editUser;
     }
 /*
     getToken(login: string, password: string): Observable<Response> {        

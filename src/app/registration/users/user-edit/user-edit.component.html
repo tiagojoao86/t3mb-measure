@@ -1,4 +1,73 @@
-<div class="container border">
+<p-panel header="{{ editMode ? user.name : 'Novo Usuário'}}" 
+    *ngIf="(user || editMode != true) && superiorsList.length > 0 && userGroupsList.length > 0">
+  <div class="ui-g ui-fluid">
+      <form [formGroup]="userForm" (ngSubmit)="onSubmit()" style="width: 100%">
+        <div class="p-grid">
+          <div class="p-sm-12 p-md-8 p-lg-8 p-xl-8">
+            <h4>ID</h4>
+            <div class="p-col-12">                    
+                <input type="text" id="id" name="id" 
+                formControlName="id" pInputText>
+            </div>
+            <h4>Nome</h4>
+            <div class="p-col-12">                    
+                <input type="text" id="name" name="name" 
+                formControlName="name" pInputText>
+            </div>
+            <h4>Login</h4>
+            <div class="p-col-12">                    
+                <input type="text" id="login" name="login" 
+                formControlName="login" pInputText>
+            </div>
+            <h4>Senha</h4>
+            <div class="p-col-12">                    
+                <input type="password" id="password" name="password" 
+                formControlName="password" pPassword [feedback]=false>
+            </div>
+            <div class="p-col-12"> 
+              <p-checkbox name="isAcive" label="Ativo" 
+              formControlName="isActive" id="isActive" binary="true"></p-checkbox>
+            </div>
+            <h4>Perfil</h4>
+            <div class="p-col-12"> 
+              <p-checkbox name="isAdmin" label="Administrador" 
+              formControlName="isAdmin" id="isAdmin" binary="true"></p-checkbox>
+            </div>
+            <div class="p-col-12"> 
+              <p-checkbox name="isAvaliador" label="Avaliador" 
+              formControlName="isAvaliador" id="isAvaliador" binary="true"></p-checkbox>
+            </div>
+            <div class="p-col-12"> 
+              <p-checkbox name="isAvaliado" label="Avaliado" 
+              formControlName="isAvaliado" id="isAvaliado" binary="true"></p-checkbox>
+            </div>
+            <h4>Superior</h4>
+            <div class="p-col-12"> 
+              <p-checkbox name="hasSuperior" label="Tem Superior" 
+              formControlName="hasSuperior" id="hasSuperior" binary="true"></p-checkbox>
+            </div>
+            <div class="p-col-12"> 
+              <p-dropdown [options]="superiorsList" formControlName="superior"
+              placeholder="Selecione o Superior" optionLabel="name" [showClear]="true"></p-dropdown>
+            </div>
+            <h4>Grupo</h4>
+            <div class="p-col-12"> 
+              <p-dropdown [options]="userGroupsList" formControlName="userGroup"
+              placeholder="Selecione o Grupo" optionLabel="name" [showClear]="true"></p-dropdown>
+            </div>
+            <div class="p-col-3">
+              <button pButton class="ui-button-raised ui-button-success" type="submit" label="Salvar"></button>
+            </div>
+            <div class="p-col-3">
+              <button pButton class="ui-button-raised ui-button-danger" type="button" label="Cancelar"
+              (click)="onCancel()"></button>
+            </div>
+          </div>
+        </div>
+      </form>
+  </div>
+</p-panel>
+<!--<div class="container border" *ngIf="user || editMode == false">
   <div class="row">
     <div class="col-md-6 col-xs-6">
       <h3>{{ editMode ? user.name : 'Novo Usuário'}}</h3>
@@ -80,5 +149,5 @@
       </form>    
     </div>
   </div>
-</div>
+</div> -->
 

@@ -42,6 +42,7 @@ import {BreadcrumbModule} from 'primeng/breadcrumb';
 import {ToastModule} from 'primeng/toast';
 import {CheckboxModule} from 'primeng/checkbox';
 import {TableModule} from 'primeng/table';
+import {DropdownModule} from 'primeng/dropdown';
 
 
 registerLocaleData(localePt, 'pt-BR', localePtExtra);
@@ -76,7 +77,7 @@ registerLocaleData(localePt, 'pt-BR', localePtExtra);
     ReactiveFormsModule,
     PanelModule, InputTextModule, PasswordModule, ButtonModule, 
     MegaMenuModule, DialogModule, BreadcrumbModule, ToastModule,
-    CheckboxModule, TableModule
+    CheckboxModule, TableModule, DropdownModule
   ],
   providers: [AuthService, 
     AuthGuard, 

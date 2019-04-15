@@ -43,7 +43,12 @@ export class UsersComponent implements OnInit {
   }
 
   onEdit(id: number) {
-    this.router.navigate([id], {relativeTo: this.route});
+    this.userList.forEach(user => {
+      if (user.id === id) {
+        this.usersService.setEditUser(user);
+      }
+    });
+    this.router.navigate(['edit'], {relativeTo: this.route});
   }
 
   onCreate() {

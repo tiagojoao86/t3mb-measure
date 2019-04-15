@@ -24,14 +24,14 @@ export class LoginComponent implements OnInit {
     private router: Router, private httpClient: HttpClient) { }
 
   ngOnInit() {
-    this.onLogin(null);
+    
   }
 
   onLogin(form: NgForm) { 
-    //const login = form.value.login;
-    //const password = form.value.password;
-    const login = 'admin';
-    const password = '123456';
+    const login = form.value.login;
+    const password = form.value.password;
+    //const login = 'admin';
+    //const password = '123456';
 
     this.httpClient.post<Response>('http://localhost:8080/auth', {login: login, password: password}).toPromise()
         .then(response => {                                              
@@ -40,7 +40,8 @@ export class LoginComponent implements OnInit {
             .then((response: Response) => {
               const user: User = response.data;
               this.authService.setLoggedUser(user);                
-              this.router.navigate(['/registration/users']);
+              //this.router.navigate(['/registration/users']);
+              this.router.navigate(['/']);
             })
             .catch(
               error => {
